@@ -1,17 +1,19 @@
-﻿namespace ContractManagement.Domain.Entity.Pedido
+﻿using ContractManagement.Domain.Common.Base;
+
+namespace ContractManagement.Domain.Entity.Pedido
 {
-    public class Pedido
+    public class PedidoEntity : EntityBase
     {
-        public Guid Id { get;  private set; }
         public decimal ValorTotal { get; private set; }
 
-        public Pedido() 
+        public PedidoEntity() 
         {
             Id = Guid.NewGuid();
         }
         public void AdicionarItem(decimal valor)
         {
             ValorTotal += valor;
+            SetDataAtualizacao();
         }
     }
 }

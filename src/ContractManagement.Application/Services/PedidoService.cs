@@ -22,9 +22,9 @@ namespace ContractManagement.Application.Services
             await _pedidoRepository.Salvar();
         }
 
-        public async Task<Pedido> CriarPedido()
+        public async Task<PedidoEntity> CriarPedido()
         {
-            var pedido = new Pedido();
+            var pedido = new PedidoEntity();
             await _pedidoRepository.Inserir(pedido);
             await _pedidoRepository.Salvar();
             return pedido;

@@ -9,17 +9,17 @@ namespace ContractManagement.Infrastructure.Repository
     {
         private readonly ContractManagementContext _context = context;
 
-        public async Task Atualizar(Pedido pedido)
+        public async Task Atualizar(PedidoEntity pedido)
         {
             await _context.Pedidos.Where(p => p.Id == pedido.Id).ExecuteUpdateAsync(set => set.SetProperty(b => b.ValorTotal, pedido.ValorTotal));            
         }
 
-        public async Task Inserir(Pedido pedido)
+        public async Task Inserir(PedidoEntity pedido)
         {
             await _context.Pedidos.AddAsync(pedido);
         }
 
-        public async Task<List<Pedido>> Listar()
+        public async Task<List<PedidoEntity>> Listar()
         {
             var listar = await _context.Pedidos.ToListAsync();
             if (listar.Count > 0)
@@ -29,14 +29,14 @@ namespace ContractManagement.Infrastructure.Repository
             return listar;                   
         }
 
-        public async Task<Pedido> ObterPorId(Guid id)
+        public async Task<PedidoEntity> ObterPorId(Guid id)
         {
             var pedido = await _context.Pedidos.FirstOrDefaultAsync(p => p.Id == id);
             if (pedido != null)
             {
                 return pedido;
             }
-            return new Pedido();
+            return new PedidoEntity();
             
         }
 

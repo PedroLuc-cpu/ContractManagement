@@ -4,11 +4,11 @@ namespace ContractManagement.Infrastructure.Repository.Contracts.IPedido
 {
     public interface IPedidoRepository
     {
-        Task Inserir(Pedido pedido);
+        Task Inserir(PedidoEntity pedido);
         Task Salvar();
-        Task<Pedido> ObterPorId(Guid id);
-        Task Atualizar(Pedido pedido);
-        Task<List<Pedido>> Listar();
+        Task<PedidoEntity> ObterPorId(Guid id);
+        Task Atualizar(PedidoEntity pedido);
+        Task<List<PedidoEntity>> Listar();
 
     }
 }

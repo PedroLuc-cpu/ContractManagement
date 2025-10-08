@@ -6,7 +6,7 @@ namespace ContractManagement.Infrastructure.Data
 {
     public class ContractManagementContext : DbContext, IUnitOfWork
     {
-        public DbSet<Pedido> Pedidos { get; set; }
+        public DbSet<PedidoEntity> Pedidos { get; set; }
         public ContractManagementContext(DbContextOptions<ContractManagementContext> options) : base(options) 
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTrackingWithIdentityResolution;

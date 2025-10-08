@@ -13,7 +13,7 @@ namespace ContractManagement.Api.Controllers.PedidoControllers
         private readonly IPedidoService _pedidoService = pedidoService;
 
         [HttpGet]
-        [ProducesResponseType(typeof(Pedido), 200)]
+        [ProducesResponseType(typeof(PedidoEntity), 200)]
 
         public async Task<IActionResult> Carregar()
         {
@@ -26,19 +26,19 @@ namespace ContractManagement.Api.Controllers.PedidoControllers
 
         }
         [HttpGet("id:{id:guid}")]
-        [ProducesResponseType(typeof(Pedido), 200)]
+        [ProducesResponseType(typeof(PedidoEntity), 200)]
 
         public async Task<IActionResult> Carregar(Guid id)
         {
             var pedido = await _pedidoRepository.ObterPorId(id);
-            if (pedido != null)
+            if (pedido.Id.Equals(id))
             {
                 return Ok(pedido);
             }
             return CustomResponse("Não foi encontrado nenhum pedido com esse identificador");
         }
         [HttpPost]
-        [ProducesResponseType(typeof(Pedido), 201)]
+        [ProducesResponseType(typeof(PedidoEntity), 201)]
         public async Task<IActionResult> Inserir()
         {
             var pedido = await _pedidoService.CriarPedido();
@@ -46,10 +46,12 @@ namespace ContractManagement.Api.Controllers.PedidoControllers
 
         }
         [HttpPut("{id}/adicionar")]
+        [ProducesResponseType(typeof(PedidoEntity), 201)]
+
         public async Task<IActionResult> AdicionarValor(Guid id, [FromBody] decimal valor)
         {
             await _pedidoService.AdicionarValor(id, valor);
-            return Ok();
+            return Ok("Valor do pedido foi adicionado.");
         }
     }
 }
