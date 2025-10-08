@@ -1,14 +1,3 @@
----
-title: ContractManagement
-description: Projeto de estudos aplicando DDD e Clean Architecture com ASP.NET Core e EF Core.
-tags:
-  - DDD
-  - Clean Architecture
-  - ASP.NET Core
-  - EF Core
-  - Software Architecture
----
-
 # 🧩 ContractManagement
 
 > Um projeto de estudos sobre **Domain-Driven Design (DDD)** e **Clean Architecture**, desenvolvido em **ASP.NET Core** com **Entity Framework Core**.  
