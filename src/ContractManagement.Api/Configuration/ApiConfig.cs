@@ -1,8 +1,5 @@
 ﻿using ContractManagement.Application.Services;
-using ContractManagement.Application.Services.Contracts;
 using ContractManagement.Domain.Converters;
-using ContractManagement.Infrastructure.Repository;
-using ContractManagement.Infrastructure.Repository.Contracts.IPedido;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
@@ -71,11 +68,7 @@ namespace ContractManagement.Api.Configuration
 
         private static void RegisterServices(IServiceCollection services)
         {
-            services.AddScoped<IPedidoRepository, PedidoRepository>();
-            services.AddScoped<IPedidoService, PedidoService>();
-
             services.AddHealthChecks();
-         
         }        
     }
 }

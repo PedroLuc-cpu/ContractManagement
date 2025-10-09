@@ -1,11 +1,10 @@
-
-
 using ContractManagement.Api.Configuration;
+using ContractManagement.Infrastructure.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.SetDefaultConfiguration(builder.Environment);
-builder.Services.AddIdentityConfiguration(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApiConfiguration(builder.Configuration);
 builder.Services.AddSwaggerConfiguration(builder.Environment);
 

@@ -1,34 +1,31 @@
-﻿using ContractManagement.Application.Services.Contracts;
+﻿using ContractManagement.Application.Contracts.Repository.IPedido;
+using ContractManagement.Application.Contracts.Services;
+using ContractManagement.Application.Interfaces;
 using ContractManagement.Domain.Entity.Pedido;
-using ContractManagement.Infrastructure.Repository.Contracts.IPedido;
-
+    
 namespace ContractManagement.Application.Services
 {
-    public class PedidoService : IPedidoService
+    public class PedidoService(IPedidoRepository pedidoRepository, IUnitOfWork unitOfWork) : IPedidoService
     {
-        private readonly IPedidoRepository _pedidoRepository;
-        public PedidoService(IPedidoRepository pedidoRepository)
-        {
-            _pedidoRepository = pedidoRepository;
-        }
+        private readonly IPedidoRepository _pedidoRepository = pedidoRepository;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         public async Task AdicionarValor(Guid idPedido, decimal Valor)
         {
-            var pedido = await _pedidoRepository.ObterPorId(idPedido) ?? throw new Exception("Pedido não foi encontrado");
+            var pedido = await _pedidoRepository.GetByIdAsync(idPedido) ?? throw new Exception("Pedido não foi encontrado");
 
             pedido.AdicionarItem(Valor);
 
-            await _pedidoRepository.Atualizar(pedido);
-            await _pedidoRepository.Salvar();
+            await _pedidoRepository.UpdateAsync(pedido);
+            await _unitOfWork.Commit();
         }
 
         public async Task<PedidoEntity> CriarPedido()
         {
-            var pedido = new PedidoEntity();
-            await _pedidoRepository.Inserir(pedido);
-            await _pedidoRepository.Salvar();
+            var pedido = new PedidoEntity(Guid.NewGuid(), 1, "1234");
+            await _pedidoRepository.InsertAsync(pedido);
+            await _unitOfWork.Commit();
             return pedido;
         }
-
     }
 }

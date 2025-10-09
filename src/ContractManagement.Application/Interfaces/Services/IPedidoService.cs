@@ -1,6 +1,6 @@
 ﻿using ContractManagement.Domain.Entity.Pedido;
 
-namespace ContractManagement.Application.Services.Contracts
+namespace ContractManagement.Application.Contracts.Services
 {
     public interface IPedidoService
     {

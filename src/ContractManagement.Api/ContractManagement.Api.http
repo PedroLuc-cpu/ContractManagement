@@ -1,0 +1,9 @@
+﻿@ContractManagement.Api_HostAddress = http://localhost:5065/v1/api
+
+GET {{ContractManagement.Api_HostAddress}}/pedido
+
+###
+
+POST {{ContractManagement.Api_HostAddress}}/pedido
+
+###

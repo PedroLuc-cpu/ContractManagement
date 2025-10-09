@@ -1,9 +1,9 @@
-﻿
-using ContractManagement.Domain.Entity.Pedido;
+﻿using ContractManagement.Domain.Entity.Pedido;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ContractManagement.Infrastructure.Data.Mapping
+
+namespace ContractManagement.Application.Mappings
 {
     public class PedidoMapping : IEntityTypeConfiguration<PedidoEntity>
     {
@@ -14,6 +14,13 @@ namespace ContractManagement.Infrastructure.Data.Mapping
             builder.Property(p => p.ValorTotal).HasColumnName("valor_total").HasColumnType("numeric");
             builder.Property(p => p.DataCriacao).HasColumnName("dt_created").IsRequired();
             builder.Property(p => p.DataAtualizao).HasColumnName("dt_update");
+
+            builder.HasMany(p => p.Items)
+                .WithOne()
+                .HasForeignKey("pedidoId")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(p => p.Numero).IsUnique();
         }
     }
 }

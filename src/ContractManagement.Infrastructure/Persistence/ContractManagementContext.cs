@@ -1,12 +1,12 @@
-﻿using ContractManagement.Domain.Common.Data;
-using ContractManagement.Domain.Entity.Pedido;
+﻿using ContractManagement.Domain.Entity.Pedido;
 using Microsoft.EntityFrameworkCore;
 
-namespace ContractManagement.Infrastructure.Data
+namespace ContractManagement.Infrastructure.Persistence
 {
-    public class ContractManagementContext : DbContext, IUnitOfWork
+    public class ContractManagementContext : DbContext
     {
         public DbSet<PedidoEntity> Pedidos { get; set; }
+        public DbSet<ItemPedidoEntity> ItemPedido { get; set; }
         public ContractManagementContext(DbContextOptions<ContractManagementContext> options) : base(options) 
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTrackingWithIdentityResolution;
@@ -14,11 +14,6 @@ namespace ContractManagement.Infrastructure.Data
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         }
-        public async Task<bool> Commit()
-        {
-            return await base.SaveChangesAsync() > 0;
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
