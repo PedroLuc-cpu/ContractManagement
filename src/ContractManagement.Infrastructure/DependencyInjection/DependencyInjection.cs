@@ -1,6 +1,6 @@
-﻿using ContractManagement.Application.Contracts.Repository.IPedido;
-using ContractManagement.Application.Contracts.Services;
+﻿using ContractManagement.Application.Contracts.Services;
 using ContractManagement.Application.Interfaces;
+using ContractManagement.Application.Interfaces.Repository.IPedido;
 using ContractManagement.Application.Services;
 using ContractManagement.Infrastructure.Persistence;
 using ContractManagement.Infrastructure.Repositories;
@@ -43,6 +43,7 @@ namespace ContractManagement.Infrastructure.DependencyInjection
 
 
             services.AddScoped<IPedidoRepository, PedidoRepositories>();
+            services.AddScoped<IPedidoItemRepository, ItemPedidoRepositories>();
             services.AddScoped<IPedidoService, PedidoService>();
 
             return services;

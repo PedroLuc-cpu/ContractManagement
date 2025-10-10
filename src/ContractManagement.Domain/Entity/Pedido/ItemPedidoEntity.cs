@@ -1,11 +1,11 @@
-﻿using ContractManagement.Domain.Common.Exceptions;
+﻿using ContractManagement.Domain.Common.Base;
+using ContractManagement.Domain.Common.Exceptions;
 using ContractManagement.Domain.Common.Validations;
 
 namespace ContractManagement.Domain.Entity.Pedido
 {
-    public class ItemPedidoEntity
+    public class ItemPedidoEntity : EntityBase
     {
-        public Guid Id { get; set; }
         public Guid IdProduto { get; private set; }
         public string Produto { get; private set; } = string.Empty;
         public int Quantidade { get; private set; }

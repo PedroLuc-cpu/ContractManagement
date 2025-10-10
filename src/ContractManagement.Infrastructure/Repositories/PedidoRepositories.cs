@@ -1,4 +1,4 @@
-﻿using ContractManagement.Application.Contracts.Repository.IPedido;
+﻿using ContractManagement.Application.Interfaces.Repository.IPedido;
 using ContractManagement.Domain.Entity.Pedido;
 using ContractManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;

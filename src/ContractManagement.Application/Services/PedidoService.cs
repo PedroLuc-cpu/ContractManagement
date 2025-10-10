@@ -1,14 +1,23 @@
-﻿using ContractManagement.Application.Contracts.Repository.IPedido;
-using ContractManagement.Application.Contracts.Services;
+﻿using ContractManagement.Application.Contracts.Services;
 using ContractManagement.Application.Interfaces;
+using ContractManagement.Application.Interfaces.Repository.IPedido;
 using ContractManagement.Domain.Entity.Pedido;
-    
+
 namespace ContractManagement.Application.Services
 {
-    public class PedidoService(IPedidoRepository pedidoRepository, IUnitOfWork unitOfWork) : IPedidoService
+    public class PedidoService(IPedidoRepository pedidoRepository, IUnitOfWork unitOfWork, IPedidoItemRepository pedidoItemRepository) : IPedidoService
     {
         private readonly IPedidoRepository _pedidoRepository = pedidoRepository;
+        private readonly IPedidoItemRepository _pedidoItemRepository = pedidoItemRepository;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
+        public async Task AdicionarItemPedido(Guid pedidoId, Guid produtoId, string nomeProduto, int quantidade, decimal precoUnitario)
+        {
+            var item = new ItemPedidoEntity(produtoId, nomeProduto, quantidade, precoUnitario);          
+                await _pedidoItemRepository.AdicionarItemPedidoAsync(item);
+                await _unitOfWork.Commit();            
+            
+        }
 
         public async Task AdicionarValor(Guid idPedido, decimal Valor)
         {
@@ -20,9 +29,9 @@ namespace ContractManagement.Application.Services
             await _unitOfWork.Commit();
         }
 
-        public async Task<PedidoEntity> CriarPedido()
+        public async Task<PedidoEntity> CriarPedido(string numero)
         {
-            var pedido = new PedidoEntity(Guid.NewGuid(), 1, "1234");
+            var pedido = new PedidoEntity(Guid.NewGuid(), 1, numero);
             await _pedidoRepository.InsertAsync(pedido);
             await _unitOfWork.Commit();
             return pedido;

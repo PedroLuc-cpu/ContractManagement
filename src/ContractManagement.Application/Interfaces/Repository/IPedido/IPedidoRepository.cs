@@ -1,7 +1,6 @@
-﻿using ContractManagement.Application.Interfaces;
-using ContractManagement.Domain.Entity.Pedido;
+﻿using ContractManagement.Domain.Entity.Pedido;
 
-namespace ContractManagement.Application.Contracts.Repository.IPedido
+namespace ContractManagement.Application.Interfaces.Repository.IPedido
 {
     public interface IPedidoRepository : IBaseRepository<PedidoEntity>
     {
