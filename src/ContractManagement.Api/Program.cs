@@ -17,6 +17,8 @@ builder.Services.Scan(
     .AsImplementedInterfaces()
     .WithScopedLifetime());
 
+builder.Services.AddMediatR(m => m.RegisterServicesFromAssembly(ContractManagement.Application.AssemblyReference.Assembly));
+
 builder.Services
     .AddControllers()
     .AddApplicationPart(ContractManagement.Presentation.AssemblyReference.Assembly);

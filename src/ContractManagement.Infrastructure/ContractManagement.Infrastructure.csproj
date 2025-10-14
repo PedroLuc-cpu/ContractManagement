@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ContractManagement.Application\ContractManagement.Application.csproj" />
     <ProjectReference Include="..\ContractManagement.Domain\ContractManagement.Domain.csproj" />
   </ItemGroup>
 

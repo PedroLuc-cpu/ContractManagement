@@ -2,15 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>6e8283e8-5117-4dc2-b66c-427cd15997b7</UserSecretsId>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Title>Sistema de contratos</Title>
+    <Description>sistema para gerar contrato de empresas</Description>
+    <PackageIcon>favicon.ico</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="C:\Users\zeroXd3\Pictures\favicon.ico">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
