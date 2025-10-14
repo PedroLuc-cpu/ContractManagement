@@ -1,9 +1,5 @@
-﻿using ContractManagement.Application.Contracts.Services;
-using ContractManagement.Application.Interfaces;
-using ContractManagement.Application.Interfaces.Repository.IPedido;
-using ContractManagement.Application.Services;
-using ContractManagement.Infrastructure.Persistence;
-using ContractManagement.Infrastructure.Repositories;
+﻿using ContractManagement.Infrastructure.Persistence;
+using Marten;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,16 +31,19 @@ namespace ContractManagement.Infrastructure.DependencyInjection
                 options.UseNpgsql(connectionString, o => o.EnableRetryOnFailure());
             });
 
+            services.AddMarten(options =>
+            {
+                options.Connection(connectionString ?? "");
+            });
+            //services.AddScoped<ContractManagementContext>();
 
-            services.AddScoped<ContractManagementContext>();
-
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            //services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
-            services.AddScoped<IPedidoRepository, PedidoRepositories>();
-            services.AddScoped<IPedidoItemRepository, ItemPedidoRepositories>();
-            services.AddScoped<IPedidoService, PedidoService>();
+            //services.AddScoped<IPedidoRepository, PedidoRepositories>();
+            //services.AddScoped<IPedidoItemRepository, ItemPedidoRepositories>();
+            //services.AddScoped<IPedidoService, PedidoService>();
 
             return services;
 

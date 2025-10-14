@@ -24,7 +24,7 @@ namespace ContractManagement.Api.Configuration
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                //c.IncludeXmlComments(xmlPath);
+                c.IncludeXmlComments(xmlPath);
 
                 //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 //{

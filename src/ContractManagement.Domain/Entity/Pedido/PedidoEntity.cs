@@ -1,7 +1,7 @@
 ﻿using ContractManagement.Domain.Common.Base;
 using ContractManagement.Domain.Common.Exceptions;
 using ContractManagement.Domain.Common.Validations;
-using ContractManagement.Domain.Interfaces;
+using ContractManagement.Domain.Primitives;
 
 namespace ContractManagement.Domain.Entity.Pedido
 {
