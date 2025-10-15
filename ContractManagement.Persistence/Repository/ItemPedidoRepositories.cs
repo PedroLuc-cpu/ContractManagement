@@ -17,13 +17,10 @@ namespace ContractManagement.Persistence.Repository
         {
             return (IEnumerable<PedidoEntity>)await _context.ItemPedido.Where(i => EF.Property<Guid>(i, "PedidoId") == pedidoId).AsNoTracking().ToListAsync();
             
-        }
-
-        public async Task<ItemPedidoEntity> GetItemPedidoByIdAsync(Guid id)
+        }        
+        public async Task<ItemPedidoEntity?> GetItemPedidoByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await _context.ItemPedido
-                            .AsNoTracking()
-                            .FirstOrDefaultAsync(i => i.Id == id);
+            return await _context.ItemPedido.FirstOrDefaultAsync(i => i.Id == id, cancellationToken);
         }
 
         public async Task RemoveAsync(Guid id)
