@@ -1,7 +1,8 @@
 ﻿using ContractManagement.Domain.Entity.Pedido;
+using ContractManagement.Domain.Interfaces;
 using ContractManagement.Domain.Interfaces.Repository.Pedidos;
 using ContractManagement.Domain.Interfaces.Services;
-using ContractManagement.Domain.Primitives;
+
 
 namespace ContractManagement.Infrastructure.Services
 {
@@ -15,7 +16,7 @@ namespace ContractManagement.Infrastructure.Services
         {
             var item = new ItemPedidoEntity(produtoId, nomeProduto, quantidade, precoUnitario);          
                 await _pedidoItemRepository.AdicionarItemPedidoAsync(item);
-                await _unitOfWork.Commit();            
+                await _unitOfWork.SaveChangesAsync();            
             
         }
 
@@ -26,14 +27,14 @@ namespace ContractManagement.Infrastructure.Services
             pedido.AdicionarItem(Valor);
 
             await _pedidoRepository.UpdateAsync(pedido);
-            await _unitOfWork.Commit();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<PedidoEntity> CriarPedido(string numero)
         {
             var pedido = new PedidoEntity(Guid.NewGuid(), 1, numero);
             await _pedidoRepository.InsertAsync(pedido);
-            await _unitOfWork.Commit();
+            await _unitOfWork.SaveChangesAsync();
             return pedido;
         }
     }

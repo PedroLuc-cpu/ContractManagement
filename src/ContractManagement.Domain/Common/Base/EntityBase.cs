@@ -12,9 +12,13 @@
     /// sobrecarrega (overrides) <see cref="object.Equals(object?)"/> e <see cref="object.GetHashCode"/> para fornecer igualdade
     ///comparação baseada no <see cref="Id"/> propriedade. Além disso, os operadores de igualdade e desigualdade são
     /// implementadas para comparar instâncias de <see cref="EntityBase"/>.</remarks>
-    public abstract class EntityBase
+    public abstract class EntityBase: IEquatable<EntityBase>
     {
-        public Guid Id { get; protected set; }
+        protected EntityBase(Guid id)
+        {
+            Id = id;
+        }
+        public Guid Id { get; protected init; }
         public DateTime DataCriacao { get; protected set; }
         public DateTime? DataAtualizao { get; protected set; }
         public EntityBase()
@@ -27,10 +31,7 @@
         {
             DataAtualizao = DateTime.UtcNow;
         }
-        protected EntityBase(Guid id)
-        {
-            Id = id;
-        }
+
         public override bool Equals(object? obj)
         {
             if (obj is not EntityBase other) return false;
@@ -43,10 +44,21 @@
         {
             return Id.GetHashCode();
         }
+
+        public bool Equals(EntityBase? other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+            if (other.GetType() != GetType()) return false;
+            return other.Id == Id;
+        }
+
         public static bool operator ==(EntityBase left, EntityBase right)
         {
-            if (ReferenceEquals(left, null))
-                return ReferenceEquals(right, null);
+            if (left is null)
+                return right is null;
             return left.Equals(right);
         }
         public static bool operator !=(EntityBase left, EntityBase right) { return !(left == right); }

@@ -1,20 +1,21 @@
 ﻿using ContractManagement.Application.Abstractions.Messaging;
-using ContractManagement.Domain.Interfaces.Repository.Pedidos;
+using ContractManagement.Domain.Entity.Pedido;
 using ContractManagement.Domain.Shared;
+using Marten;
 
 namespace ContractManagement.Application.Query.GetItemOrderById
 {
-    internal sealed class GetItemOrderByIdQueryHandler : IQueryHandler<GetItemOrderByIdQuery, ItemOrderResponse>
+    internal sealed class GetItemOrderByIdQueryHandler(
+        // IPedidoItemRepository itemRepository,
+        IQuerySession session) : IQueryHandler<GetItemOrderByIdQuery, ItemOrderResponse>
     {
-        private readonly IPedidoItemRepository _itemRepository;
-        public GetItemOrderByIdQueryHandler(IPedidoItemRepository itemRepository)
-        {
-            _itemRepository = itemRepository;
-        }
+        //private readonly IPedidoItemRepository _itemRepository = itemRepository;
+        private readonly IQuerySession _session = session;
 
         public async Task<Result<ItemOrderResponse>> Handle(GetItemOrderByIdQuery request, CancellationToken cancellationToken)
         {
-            var itemOrder = await _itemRepository.GetItemPedidoByIdAsync(request.ItemOrder, cancellationToken);
+            //var itemOrder = await _itemRepository.GetItemPedidoByIdAsync(request.ItemOrder, cancellationToken);
+            var itemOrder = await _session.Query<ItemPedidoEntity>().Select(p => new ItemOrderResponse(p.Id, p.Produto, p.Quantidade, p.PrecoUnitario)).FirstOrDefaultAsync(cancellationToken);
 
             if (itemOrder is null)
             {
@@ -23,9 +24,7 @@ namespace ContractManagement.Application.Query.GetItemOrderById
                     $"The member with id {request.ItemOrder} was not found"
                     ));
             }
-
-            var response = new ItemOrderResponse(itemOrder.Id, itemOrder.Produto, itemOrder.Quantidade, itemOrder.PrecoUnitario);
-            return response;
+            return itemOrder;
         }
     }
 }
