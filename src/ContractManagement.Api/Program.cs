@@ -5,25 +5,26 @@ using ContractManagement.Infrastructure.Persistence;
 using Marten;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.SetDefaultConfiguration(builder.Environment);
+
 builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
+
 builder.Services.AddDbContext<ContractManagementContext>((serviceProvider, dbContextOptionsBuilder) =>
 {
-    var databaseOptions = serviceProvider.GetService<IOptions<DatabaseOptions>>()!.Value;
-
+    //var databaseOptions = serviceProvider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
     var connectionString = builder.Configuration.GetConnectionString("Default");
+
+
     dbContextOptionsBuilder.UseNpgsql(connectionString, postgreSqlAction =>
     {
-        postgreSqlAction.EnableRetryOnFailure(databaseOptions.MaxRetryCount);
-        postgreSqlAction.CommandTimeout(databaseOptions.CommandTimeout);
+        postgreSqlAction.EnableRetryOnFailure(3);
+        postgreSqlAction.CommandTimeout(30);
     });
-    dbContextOptionsBuilder.EnableDetailedErrors(databaseOptions.EnableDetailedErrors);
-    dbContextOptionsBuilder.EnableSensitiveDataLogging(databaseOptions.EnableSensitiveDataLogging);
+    dbContextOptionsBuilder.EnableDetailedErrors(false);
+    dbContextOptionsBuilder.EnableSensitiveDataLogging(true);
 });
 
 builder.Services.AddMarten(options =>

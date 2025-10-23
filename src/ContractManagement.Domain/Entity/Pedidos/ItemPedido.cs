@@ -2,18 +2,18 @@
 using ContractManagement.Domain.Common.Exceptions;
 using ContractManagement.Domain.Common.Validations;
 
-namespace ContractManagement.Domain.Entity.Pedido
+namespace ContractManagement.Domain.Entity.Pedidos
 {
-    public class ItemPedidoEntity : EntityBase
+    public class ItemPedido : EntityBase
     {
         public Guid IdProduto { get; private set; }
         public string Produto { get; private set; } = string.Empty;
         public int Quantidade { get; private set; }
         public decimal PrecoUnitario { get; private set; }
 
-        private ItemPedidoEntity() { }
+        private ItemPedido() { }
 
-        public ItemPedidoEntity(Guid produtoId, string nomeProduto, int quantidade, decimal precoUnitario)
+        public ItemPedido(Guid produtoId, string nomeProduto, int quantidade, decimal precoUnitario)
         {
             Guard.AgainstEmptyGuid(produtoId, nameof(produtoId));
             Guard.AgaintNull(nomeProduto, nameof(nomeProduto));

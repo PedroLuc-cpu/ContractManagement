@@ -3,19 +3,19 @@ using ContractManagement.Domain.Common.Exceptions;
 using ContractManagement.Domain.Common.Validations;
 using ContractManagement.Domain.Primitives;
 
-namespace ContractManagement.Domain.Entity.Pedido
+namespace ContractManagement.Domain.Entity.Pedidos
 {
-    public class PedidoEntity : EntityBase, IAggregateRoot
+    public class Pedido : EntityBase, IAggregateRoot
     {
         public Guid IdCliente { get;  private set; }
         public string Numero { get; private set; } = string.Empty;
         public decimal ValorTotal { get; private set; }
-        private readonly List<ItemPedidoEntity> _Items = [];
-        public IReadOnlyCollection<ItemPedidoEntity> Items => _Items.AsReadOnly();
+        private readonly List<ItemPedido> _Items = [];
+        public IReadOnlyCollection<ItemPedido> Items => _Items.AsReadOnly();
 
-        private PedidoEntity() { }
+        private Pedido() { }
 
-        public PedidoEntity(Guid idCliente, decimal valorTotal, string numero)
+        public Pedido(Guid idCliente, decimal valorTotal, string numero)
         {
             Guard.AgainstEmptyGuid(idCliente, nameof(idCliente));
             Guard.AgaintNull(valorTotal, nameof(valorTotal));
@@ -34,7 +34,7 @@ namespace ContractManagement.Domain.Entity.Pedido
             ValorTotal += valor;
             SetDataAtualizacao();
         }
-        public void AdicionarItem(ItemPedidoEntity item)
+        public void AdicionarItem(ItemPedido item)
         {
             Guard.AgaintNull(item, nameof(item));
             _Items.Add(item);
@@ -44,7 +44,7 @@ namespace ContractManagement.Domain.Entity.Pedido
         {
             Guard.AgainstEmptyGuid(idProduto, nameof(idProduto));
             var item = _Items.FirstOrDefault(i => i.IdProduto == idProduto);
-            Guard.Againts<DomainException>(item == null, "Item não encontrado no pedido");
+            Guard.Againts<DomainException>(item is null, "Item não encontrado no pedido");
         }
 
         public decimal CalcularTotal() => _Items.Sum(i => i.SubTotal);

@@ -1,12 +1,12 @@
-﻿using ContractManagement.Domain.Entity.Pedido;
+﻿using ContractManagement.Domain.Entity.Pedidos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ContractManagement.Application.Mappings
 {
-    public class ItemPedido : IEntityTypeConfiguration<ItemPedidoEntity>
+    public class ItemPedido : IEntityTypeConfiguration<Domain.Entity.Pedidos.ItemPedido>
     {
-        public void Configure(EntityTypeBuilder<ItemPedidoEntity> builder)
+        public void Configure(EntityTypeBuilder<Domain.Entity.Pedidos.ItemPedido> builder)
         {
             builder.ToTable(nameof(ItemPedido).ToLower());
             builder.Property(i => i.Id).ValueGeneratedNever();

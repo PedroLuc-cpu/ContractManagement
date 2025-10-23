@@ -2,7 +2,7 @@
 
 namespace ContractManagement.Application.Command.Pedidos
 {
-    public sealed record CreateOrderCommand() : ICommand
+    public sealed record CreateOrderCommand(string Numero) : ICommand
     {
 
     }

@@ -1,5 +1,5 @@
 ﻿using ContractManagement.Application.Abstractions.Messaging;
-using ContractManagement.Domain.Entity.Pedido;
+using ContractManagement.Domain.Entity.Pedidos;
 using ContractManagement.Domain.Shared;
 using Marten;
 
@@ -11,7 +11,7 @@ namespace ContractManagement.Application.Command.Product
 
         public async Task<Result> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var product = new ItemPedidoEntity(Guid.NewGuid(), request.ProductName, request.Quantity, request.UnitPrice);
+            var product = new ItemPedido(Guid.NewGuid(), request.ProductName, request.Quantity, request.UnitPrice);
             _session.Store(product);
 
             await _session.SaveChangesAsync(cancellationToken);

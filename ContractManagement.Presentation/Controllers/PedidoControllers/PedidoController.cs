@@ -1,5 +1,5 @@
 ﻿using ContractManagement.Domain.Common.Exceptions;
-using ContractManagement.Domain.Entity.Pedido;
+using ContractManagement.Domain.Entity.Pedidos;
 using ContractManagement.Domain.Interfaces.Repository.Pedidos;
 using ContractManagement.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +22,7 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(PedidoEntity), 200)]
+        [ProducesResponseType(typeof(Pedido), 200)]
 
         public async Task<IActionResult> Carregar()
         {
@@ -49,7 +49,7 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("id:{id:guid}")]
-        [ProducesResponseType(typeof(PedidoEntity), 200)]
+        [ProducesResponseType(typeof(Pedido), 200)]
 
         public async Task<IActionResult> Carregar(Guid id)
         {
@@ -78,7 +78,7 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
         /// <param name="numero">numero do pedido</param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(typeof(PedidoEntity), 201)]
+        [ProducesResponseType(typeof(Pedido), 201)]
         public async Task<IActionResult> Inserir([FromBody] string numero)
         {
             LimparErrosProcessamento();
@@ -95,6 +95,26 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
             }
 
         }
+        [HttpGet("listar-pedios/{pageNumber:int}/{pageSize:int}")]
+        public async Task<IActionResult> ListarPedidos(int pageNumber = 1, int pageSize = 10)
+        {
+            LimparErrosProcessamento();
+            try
+            {
+                var pedidos = await _pedidoRepository.ListaPaginada(pageNumber, pageSize);
+                if (!pedidos.Any())
+                {
+                    AdicionarErroProcessamento("Não foi encontrado nenhum pedido");
+                    return CustomResponse();
+                }
+                return Ok(pedidos);
+            }
+            catch (Exception ex)
+            {
+                AdicionarErroProcessamento(ex.Message);
+                return CustomResponse();
+            }
+        }
         /// <summary>
         /// rota para adicionar valor do pedido
         /// </summary>
@@ -102,7 +122,7 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
         /// <param name="valor">valor do pedido</param>
         /// <returns></returns>
         [HttpPut("{id}/adicionar")]
-        [ProducesResponseType(typeof(PedidoEntity), 201)]
+        [ProducesResponseType(typeof(Pedido), 201)]
 
         public async Task<IActionResult> AdicionarValor(Guid id, [FromBody] decimal valor)
         {
@@ -124,7 +144,7 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
         /// <param name="id">id do pedido-item</param>
         /// <returns></returns>
         [HttpGet("pedido-com-items/id:{id:guid}")]
-        [ProducesResponseType(typeof(ItemPedidoEntity), 200)]
+        [ProducesResponseType(typeof(ItemPedido), 200)]
         public async Task<IActionResult> ListarPedidoComItems(Guid id)
         {
             LimparErrosProcessamento();
@@ -150,14 +170,14 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("pedido-items/id:{id:guid}")]
-        [ProducesResponseType(typeof(ItemPedidoEntity), 200)]
+        [ProducesResponseType(typeof(ItemPedido), 200)]
         public async Task<IActionResult> ListarPedidoItems(Guid id)
         {
             LimparErrosProcessamento();
             try
             {
                 var pedidoItems = await _pedidoItemRepository.GetItemPedidoByIdAsync(id);
-                if (pedidoItems.Id != id)
+                if (pedidoItems.Equals(id))
                 {
                     AdicionarErroProcessamento("Não foi encontrado nenhum pedido com esse identificador");
                     return CustomResponse();
@@ -181,7 +201,7 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
         /// <param name="precoUnitario">preço unitário do item (produto)</param>
         /// <returns></returns>
         [HttpPost("{id}/adicionar-item-pedido")]
-        [ProducesResponseType(typeof(ItemPedidoEntity), 201)]
+        [ProducesResponseType(typeof(ItemPedido), 201)]
         public async Task<IActionResult> AdicionarItemPedido(Guid id, Guid produtoId,  string nomeProduto, int quantidade, decimal precoUnitario)
             { 
             LimparErrosProcessamento();

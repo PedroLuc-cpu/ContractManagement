@@ -1,13 +1,13 @@
-﻿using ContractManagement.Domain.Entity.Pedido;
+﻿using ContractManagement.Domain.Entity.Pedidos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
 namespace ContractManagement.Application.Mappings
 {
-    public class PedidoMapping : IEntityTypeConfiguration<PedidoEntity>
+    public class PedidoMapping : IEntityTypeConfiguration<Pedido>
     {
-        public void Configure(EntityTypeBuilder<PedidoEntity> builder)
+        public void Configure(EntityTypeBuilder<Pedido> builder)
         {
             builder.ToTable("pedido");
             builder.HasKey(p => p.Id);

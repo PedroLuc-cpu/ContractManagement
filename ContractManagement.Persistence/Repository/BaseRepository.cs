@@ -15,10 +15,6 @@ namespace ContractManagement.Persistence.Repository
         public async Task<IEnumerable<T>> GetAllAsync() => await _dbSet.ToListAsync();
 
         public async Task<T?> GetByIdAsync(Guid id) => await _dbSet.FindAsync(id);
-        
-
-        public async Task InsertAsync(T entity) => await _dbSet.AddAsync(entity);
-
         public async Task UpdateAsync(T entity) =>
             await _dbSet.Where(b => b.Equals(entity)).ExecuteUpdateAsync(
                 setters => setters.SetProperty(b => b.Equals(entity), entity.Equals(entity)));

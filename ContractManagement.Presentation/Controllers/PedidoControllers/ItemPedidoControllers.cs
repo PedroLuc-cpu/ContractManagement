@@ -29,7 +29,7 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
             return response.IsSuccess ? Ok(response.Value) : BadRequest(response.Error);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<IActionResult> GetItemsOrders(CancellationToken cancellationToken)
         {

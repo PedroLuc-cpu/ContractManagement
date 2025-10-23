@@ -1,4 +1,4 @@
-﻿using ContractManagement.Domain.Entity.Pedido;
+﻿using ContractManagement.Domain.Entity.Pedidos;
 using ContractManagement.Domain.Interfaces;
 using ContractManagement.Domain.Interfaces.Repository.Pedidos;
 using ContractManagement.Domain.Interfaces.Services;
@@ -14,7 +14,7 @@ namespace ContractManagement.Infrastructure.Services
 
         public async Task AdicionarItemPedido(Guid pedidoId, Guid produtoId, string nomeProduto, int quantidade, decimal precoUnitario)
         {
-            var item = new ItemPedidoEntity(produtoId, nomeProduto, quantidade, precoUnitario);          
+            var item = new ItemPedido(produtoId, nomeProduto, quantidade, precoUnitario);          
                 await _pedidoItemRepository.AdicionarItemPedidoAsync(item);
                 await _unitOfWork.SaveChangesAsync();            
             
@@ -30,10 +30,9 @@ namespace ContractManagement.Infrastructure.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<PedidoEntity> CriarPedido(string numero)
+        public async Task<Pedido> CriarPedido(string numero)
         {
-            var pedido = new PedidoEntity(Guid.NewGuid(), 1, numero);
-            await _pedidoRepository.InsertAsync(pedido);
+            var pedido = new Pedido(Guid.NewGuid(), 1, numero);
             await _unitOfWork.SaveChangesAsync();
             return pedido;
         }
