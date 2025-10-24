@@ -18,6 +18,10 @@ namespace ContractManagement.Domain.Entity.Pedidos
 
         public Pedido(Guid produtoId, string nomeProduto, int quantidade, decimal precoUnitario)
         {
+            Guard.AgainstEmptyGuid(produtoId, nameof(produtoId));
+            Guard.AgaintNull(nomeProduto, nameof(nomeProduto));
+            Guard.Againts<DomainException>(quantidade <= 0, "A quantidade deve ser maior que zero");
+            Guard.Againts<DomainException>(precoUnitario <= 0, "O preço unitário deve ser maior que zero");
             var item = new ItemPedido(produtoId, nomeProduto, quantidade, precoUnitario);
             _Items.Add(item);
             CalcularTotal();
@@ -30,7 +34,6 @@ namespace ContractManagement.Domain.Entity.Pedidos
             Guard.AgaintNull(item, nameof(item));
             _Items.Add(item);
         }
-
         public void RemoverItem(Guid idProduto)
         {
             Guard.AgainstEmptyGuid(idProduto, nameof(idProduto));

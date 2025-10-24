@@ -1,6 +1,7 @@
 ﻿using ContractManagement.Domain.Common.Base;
 using ContractManagement.Domain.Common.Exceptions;
 using ContractManagement.Domain.Common.Validations;
+using ContractManagement.Domain.Entity;
 
 namespace ContractManagement.Domain.ValueObjects
 {
@@ -10,6 +11,8 @@ namespace ContractManagement.Domain.ValueObjects
         public string Produto { get; private set; } = string.Empty;
         public int Quantidade { get; private set; }
         public decimal PrecoUnitario { get; private set; }
+        private readonly List<ItemPedido> _items = [];
+        public IReadOnlyCollection<ItemPedido> Items => _items.AsReadOnly();
 
         private ItemPedido() { }
 
@@ -24,6 +27,12 @@ namespace ContractManagement.Domain.ValueObjects
             Produto = nomeProduto;
             Quantidade = quantidade;
             PrecoUnitario = precoUnitario;
+        }
+        public void AdicionarProduto(Produto produto)
+        {
+            Guard.AgaintNull(produto, nameof(produto));
+            var item = new ItemPedido(produto.Id, produto.Nome, 1, produto.PrecoVenda);
+            _items.Add(item);
         }
 
         public decimal SubTotal => Quantidade * PrecoUnitario;

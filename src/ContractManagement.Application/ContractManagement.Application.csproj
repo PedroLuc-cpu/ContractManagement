@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ContractManagement.Domain\ContractManagement.Domain.csproj" />
+    <Compile Remove="Validators\**" />
+    <EmbeddedResource Remove="Validators\**" />
+    <None Remove="Validators\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Validators\" />
+    <ProjectReference Include="..\ContractManagement.Domain\ContractManagement.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

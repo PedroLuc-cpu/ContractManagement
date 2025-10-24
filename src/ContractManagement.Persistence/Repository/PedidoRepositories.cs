@@ -1,14 +1,20 @@
 ﻿using ContractManagement.Domain.Entity.Pedidos;
+using ContractManagement.Domain.Interfaces.Repository.Clientes;
 using ContractManagement.Domain.Interfaces.Repository.Pedidos;
 using ContractManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace ContractManagement.Persistence.Repository
 {
-    public class PedidoRepositories(ContractManagementContext context) : BaseRepository<Pedido>(context), IPedidoRepository
+    public class PedidoRepositories(ContractManagementContext context, IClienteRepository clienteRepository) : BaseRepository<Pedido>(context), IPedidoRepository
     {
+        private readonly IClienteRepository _clienteRepository = clienteRepository;
         public async Task Adicionar(Pedido pedido, CancellationToken cancellationToken = default)
         {
+            var cliente =  await _clienteRepository.GetByIdAsync(pedido.IdCliente);
+
+
+
             await _dbSet.AddAsync(pedido, cancellationToken);
         }
 

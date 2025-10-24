@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
-namespace ContractManagement.Application.Mappings
+namespace ContractManagement.Infrastructure.Persistence.Configurations
 {
     public class PedidoMapping : IEntityTypeConfiguration<Pedido>
     {
