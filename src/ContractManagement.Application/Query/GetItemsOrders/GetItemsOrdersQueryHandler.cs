@@ -1,6 +1,6 @@
 ﻿using ContractManagement.Application.Abstractions.Messaging;
-using ContractManagement.Domain.Entity.Pedidos;
 using ContractManagement.Domain.Shared;
+using ContractManagement.Domain.ValueObjects;
 using Marten;
 
 namespace ContractManagement.Application.Query.GetItemsOrders
@@ -14,7 +14,7 @@ namespace ContractManagement.Application.Query.GetItemsOrders
             IReadOnlyList<ItemsOrdersResponse> ítensOrders = 
                 await _session
                 .Query<ItemPedido>()
-                .Select(i => new ItemsOrdersResponse(i.Id, i.Produto, i.Quantidade, i.PrecoUnitario))
+                .Select(i => new ItemsOrdersResponse(i.IdProduto, i.Produto, i.Quantidade, i.PrecoUnitario))
                 .ToListAsync(cancellationToken) ;
 
             return ítensOrders.ToList();

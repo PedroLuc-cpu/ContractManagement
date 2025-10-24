@@ -19,7 +19,10 @@ namespace ContractManagement.Presentation.Controllers
                 }
                 return Ok(result);
             }
-            return BadRequest(new ValidationProblemDetails(ModelState));
+
+            var problemDetails = new ValidationProblemDetails();
+            problemDetails.Errors.Add("Mensagens", [.. Erros]);
+            return BadRequest(problemDetails);
         }
 
         protected ActionResult CustomResponse(string mensagem)

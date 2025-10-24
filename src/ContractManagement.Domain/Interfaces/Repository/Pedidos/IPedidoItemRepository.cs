@@ -1,4 +1,5 @@
 ﻿using ContractManagement.Domain.Entity.Pedidos;
+using ContractManagement.Domain.ValueObjects;
 
 namespace ContractManagement.Domain.Interfaces.Repository.Pedidos
 {

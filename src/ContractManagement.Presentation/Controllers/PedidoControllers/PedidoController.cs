@@ -2,6 +2,7 @@
 using ContractManagement.Domain.Entity.Pedidos;
 using ContractManagement.Domain.Interfaces.Repository.Pedidos;
 using ContractManagement.Domain.Interfaces.Services;
+using ContractManagement.Domain.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContractManagement.Presentation.Controllers.PedidoControllers
@@ -11,7 +12,7 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
     /// </summary>  
     [Route("pedido")]
     [Produces("application/json")]
-    public class PedidoController(IPedidoRepository pedidoRepository, IPedidoService pedidoService, IPedidoItemRepository pedidoItemRepository ) : MainController
+    public sealed class PedidoController(IPedidoRepository pedidoRepository, IPedidoService pedidoService, IPedidoItemRepository pedidoItemRepository ) : MainController
     {
         private readonly IPedidoRepository _pedidoRepository = pedidoRepository;
         private readonly IPedidoItemRepository _pedidoItemRepository = pedidoItemRepository;
@@ -177,7 +178,7 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
             try
             {
                 var pedidoItems = await _pedidoItemRepository.GetItemPedidoByIdAsync(id);
-                if (pedidoItems.Equals(id))
+                if (pedidoItems is null)
                 {
                     AdicionarErroProcessamento("Não foi encontrado nenhum pedido com esse identificador");
                     return CustomResponse();
@@ -208,7 +209,7 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
             try
             {
                 var pedido = await _pedidoRepository.GetByIdAsync(id);
-                if (pedido.Id == id)
+                if (pedido is not null)
                 {
                     await _pedidoService.AdicionarItemPedido(id, produtoId, nomeProduto, quantidade, precoUnitario);
                     return Ok("Item adicionado no pedido");

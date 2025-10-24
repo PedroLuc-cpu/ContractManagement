@@ -3,6 +3,7 @@ using System;
 using ContractManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ContractManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ContractManagementContext))]
-    partial class ContractManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20251024131410_createClient")]
+    partial class createClient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,6 +42,42 @@ namespace ContractManagement.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("clientes", (string)null);
+                });
+
+            modelBuilder.Entity("ContractManagement.Domain.Entity.Pedidos.ItemPedido", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DataAtualizao")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("IdProduto")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id_pedidos");
+
+                    b.Property<decimal>("PrecoUnitario")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Produto")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("pedidoId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("pedidoId");
+
+                    b.ToTable("itempedido", (string)null);
                 });
 
             modelBuilder.Entity("ContractManagement.Domain.Entity.Pedidos.Pedido", b =>
@@ -72,82 +111,6 @@ namespace ContractManagement.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("pedido", (string)null);
-                });
-
-            modelBuilder.Entity("ContractManagement.Domain.Entity.Produto", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("boolean")
-                        .HasColumnName("ativo");
-
-                    b.Property<string>("Codigo")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
-                        .HasColumnName("codigo");
-
-                    b.Property<string>("CodigoBarras")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("character varying(14)")
-                        .HasColumnName("cod_barras");
-
-                    b.Property<DateTime?>("DataAtualizao")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("EstoqueAtual")
-                        .HasMaxLength(200)
-                        .HasColumnType("integer")
-                        .HasColumnName("estoque_atual");
-
-                    b.Property<int>("EstoqueMaximo")
-                        .HasMaxLength(200)
-                        .HasColumnType("integer")
-                        .HasColumnName("estoque_max");
-
-                    b.Property<int>("EstoqueMinimo")
-                        .HasMaxLength(200)
-                        .HasColumnType("integer")
-                        .HasColumnName("estoque_min");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
-                        .HasColumnName("nome");
-
-                    b.Property<string>("Observacao")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
-                        .HasColumnName("obersavao");
-
-                    b.Property<decimal>("PrecoCusto")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)")
-                        .HasColumnName("preco_custo");
-
-                    b.Property<decimal>("PrecoVenda")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)")
-                        .HasColumnName("preco_venda");
-
-                    b.Property<string>("UnidadeMedida")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
-                        .HasColumnName("und_medida");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("produtos", (string)null);
                 });
 
             modelBuilder.Entity("ContractManagement.Domain.Entity.Clientes.Cliente", b =>
@@ -208,9 +171,6 @@ namespace ContractManagement.Infrastructure.Migrations
 
                             b1.HasKey("ClienteId");
 
-                            b1.HasIndex("Value")
-                                .IsUnique();
-
                             b1.ToTable("clientes");
 
                             b1.WithOwner()
@@ -267,45 +227,16 @@ namespace ContractManagement.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ContractManagement.Domain.Entity.Pedidos.ItemPedido", b =>
+                {
+                    b.HasOne("ContractManagement.Domain.Entity.Pedidos.Pedido", null)
+                        .WithMany("Items")
+                        .HasForeignKey("pedidoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("ContractManagement.Domain.Entity.Pedidos.Pedido", b =>
                 {
-                    b.OwnsMany("ContractManagement.Domain.ValueObjects.ItemPedido", "Items", b1 =>
-                        {
-                            b1.Property<Guid>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("uuid");
-
-                            b1.Property<Guid>("IdProduto")
-                                .HasColumnType("uuid")
-                                .HasColumnName("id_produto");
-
-                            b1.Property<Guid>("PedidoId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<decimal>("PrecoUnitario")
-                                .HasColumnType("numeric")
-                                .HasColumnName("preco_unitario");
-
-                            b1.Property<string>("Produto")
-                                .IsRequired()
-                                .HasMaxLength(200)
-                                .HasColumnType("character varying(200)")
-                                .HasColumnName("produto");
-
-                            b1.Property<int>("Quantidade")
-                                .HasColumnType("integer")
-                                .HasColumnName("quantidade");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("PedidoId");
-
-                            b1.ToTable("item_pedido", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("PedidoId");
-                        });
-
                     b.Navigation("Items");
                 });
 #pragma warning restore 612, 618

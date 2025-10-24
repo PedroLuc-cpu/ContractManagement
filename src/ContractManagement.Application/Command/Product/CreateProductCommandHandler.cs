@@ -1,6 +1,6 @@
 ﻿using ContractManagement.Application.Abstractions.Messaging;
-using ContractManagement.Domain.Entity.Pedidos;
 using ContractManagement.Domain.Shared;
+using ContractManagement.Domain.ValueObjects;
 using Marten;
 
 namespace ContractManagement.Application.Command.Product

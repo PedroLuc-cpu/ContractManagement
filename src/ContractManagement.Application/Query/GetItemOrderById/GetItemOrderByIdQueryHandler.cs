@@ -1,6 +1,6 @@
 ﻿using ContractManagement.Application.Abstractions.Messaging;
-using ContractManagement.Domain.Entity.Pedidos;
 using ContractManagement.Domain.Shared;
+using ContractManagement.Domain.ValueObjects;
 using Marten;
 
 namespace ContractManagement.Application.Query.GetItemOrderById
@@ -15,7 +15,7 @@ namespace ContractManagement.Application.Query.GetItemOrderById
         public async Task<Result<ItemOrderResponse>> Handle(GetItemOrderByIdQuery request, CancellationToken cancellationToken)
         {
             //var itemOrder = await _itemRepository.GetItemPedidoByIdAsync(request.ItemOrder, cancellationToken);
-            var itemOrder = await _session.Query<ItemPedido>().Select(p => new ItemOrderResponse(p.Id, p.Produto, p.Quantidade, p.PrecoUnitario)).FirstOrDefaultAsync(cancellationToken);
+            var itemOrder = await _session.Query<ItemPedido>().Select(p => new ItemOrderResponse(p.IdProduto, p.Produto, p.Quantidade, p.PrecoUnitario)).FirstOrDefaultAsync(cancellationToken);
 
             if (itemOrder is null)
             {

@@ -12,17 +12,27 @@ namespace ContractManagement.Infrastructure.Persistence.Configurations
             builder.HasKey(c => c.Id);
             builder.Property(c => c.DataCriacao).HasColumnName("dt_created").IsRequired();
             builder.Property(c => c.DataAtualizao).HasColumnName("dt_update");
-            builder.Property(c => c.Nome.Value).HasColumnName("first_name").HasMaxLength(50).IsRequired();
-            builder.Property(c => c.LastName.Value).HasColumnName("last_name").HasMaxLength(50).IsRequired();
-            builder.Property(c => c.Email.Value).HasColumnName("email").HasMaxLength(100).IsRequired();
+            builder.OwnsOne(c => c.Nome, nome =>
+            {
+                nome.Property(n => n.Value).HasColumnName("nome").HasMaxLength(50).IsRequired();
+            });
+            builder.OwnsOne(c => c.LastName, sobrenome =>
+            {
+                sobrenome.Property(s => s.Value).HasColumnName("sobrenome").HasMaxLength(50).IsRequired();
+            });
+            builder.OwnsOne(c => c.Email, email =>
+            {
+                email.Property(e => e.Value).HasColumnName("email").HasMaxLength(100).IsRequired();
+                email.HasIndex(e => e.Value).IsUnique();
+            });
             builder.OwnsOne(c => c.Endereco, endereco =>
             {
                 endereco.ToTable("enderecos");
                 endereco.Property(e => e.Rua).HasColumnName("rua").HasMaxLength(150).IsRequired();
                 endereco.Property(e => e.Numero).HasColumnName("numero").HasMaxLength(4);
                 endereco.Property(e => e.Cidade).HasColumnName("cidade").HasMaxLength(150).IsRequired();
-                endereco.Property(e => e.Estado).HasColumnName("rua").HasMaxLength(15).IsRequired();
-                endereco.Property(e => e.CEP).HasColumnName("cep").HasMaxLength(8).IsRequired();
+                endereco.Property(e => e.Estado).HasColumnName("estado").HasMaxLength(15).IsRequired();
+                endereco.Property(e => e.Cep).HasColumnName("cep").HasMaxLength(8).IsRequired();
             });
 
         }

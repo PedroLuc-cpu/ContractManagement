@@ -2,9 +2,9 @@
 using ContractManagement.Domain.Common.Exceptions;
 using ContractManagement.Domain.Common.Validations;
 
-namespace ContractManagement.Domain.Entity.Pedidos
+namespace ContractManagement.Domain.ValueObjects
 {
-    public class ItemPedido : EntityBase
+    public class ItemPedido : ValueObject
     {
         public Guid IdProduto { get; private set; }
         public string Produto { get; private set; } = string.Empty;
@@ -20,7 +20,6 @@ namespace ContractManagement.Domain.Entity.Pedidos
             Guard.Againts<DomainException>(quantidade <= 0, "Quantidade deve ser maior que zero.");
             Guard.Againts<DomainException>(precoUnitario <= 0, "Preço unitário deve ser maior que zero.");
 
-            Id = Guid.NewGuid();
             IdProduto = produtoId;
             Produto = nomeProduto;
             Quantidade = quantidade;
@@ -32,6 +31,14 @@ namespace ContractManagement.Domain.Entity.Pedidos
         {
             Guard.Againts<DomainException>(novaQuantidade <= 0, "Quantidade inválida");
             Quantidade = novaQuantidade;
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return IdProduto;
+            yield return Produto;
+            yield return Quantidade;
+            yield return PrecoUnitario;
         }
     }
 }

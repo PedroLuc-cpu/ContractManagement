@@ -6,9 +6,9 @@
     /// </summary>
     public interface IBaseRepository<T> where T : IAggregateRoot
     {
-        Task<T?> GetByIdAsync(Guid id);
-        Task<IEnumerable<T>> GetAllAsync();
-        Task UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
+        Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
+        Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
     }
 }

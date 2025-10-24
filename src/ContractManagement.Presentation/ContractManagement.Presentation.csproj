@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\ContractManagement.Application\ContractManagement.Application.csproj" />
-    <ProjectReference Include="..\src\ContractManagement.Domain\ContractManagement.Domain.csproj" />
+    <ProjectReference Include="..\ContractManagement.Application\ContractManagement.Application.csproj" />
+    <ProjectReference Include="..\ContractManagement.Domain\ContractManagement.Domain.csproj" />
   </ItemGroup>
 
 </Project>

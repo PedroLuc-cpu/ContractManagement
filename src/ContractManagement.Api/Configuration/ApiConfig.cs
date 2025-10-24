@@ -28,7 +28,7 @@ namespace ContractManagement.Api.Configuration
 
             services.AddSignalR();
 
-            string[]? UrlEIpsAutorizados = configuration.GetSection("UrlEIpsAutorizados").Get<string[]>();
+            var UrlEIpsAutorizados = configuration.GetSection("UrlEIpsAutorizados").Get<string[]>();
 
 
             services.AddCors(options =>

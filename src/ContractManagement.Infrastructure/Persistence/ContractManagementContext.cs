@@ -1,4 +1,5 @@
-﻿using ContractManagement.Domain.Entity.Clientes;
+﻿using ContractManagement.Domain.Entity;
+using ContractManagement.Domain.Entity.Clientes;
 using ContractManagement.Domain.Entity.Pedidos;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,8 +8,8 @@ namespace ContractManagement.Infrastructure.Persistence
     public class ContractManagementContext : DbContext
     {
         public DbSet<Pedido> Pedidos { get; set; }
-        public DbSet<ItemPedido> ItemPedido { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Produto> Produtos { get; set; }
         public ContractManagementContext(DbContextOptions<ContractManagementContext> options) : base(options) 
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTrackingWithIdentityResolution;

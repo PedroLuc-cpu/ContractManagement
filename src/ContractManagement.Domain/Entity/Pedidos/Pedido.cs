@@ -2,6 +2,7 @@
 using ContractManagement.Domain.Common.Exceptions;
 using ContractManagement.Domain.Common.Validations;
 using ContractManagement.Domain.Primitives;
+using ContractManagement.Domain.ValueObjects;
 
 namespace ContractManagement.Domain.Entity.Pedidos
 {
@@ -15,25 +16,15 @@ namespace ContractManagement.Domain.Entity.Pedidos
 
         private Pedido() { }
 
-        public Pedido(Guid idCliente, decimal valorTotal, string numero)
+        public Pedido(Guid produtoId, string nomeProduto, int quantidade, decimal precoUnitario)
         {
-            Guard.AgainstEmptyGuid(idCliente, nameof(idCliente));
-            Guard.AgaintNull(valorTotal, nameof(valorTotal));
-            Guard.Againts<DomainException>(valorTotal <= 0, "O ValorToal não pode ser zero");
-            Guard.AgaintNull(numero, nameof(numero));
-
-            Id = Guid.NewGuid();
-            IdCliente = idCliente;
-            Numero = numero;
-        }
-        
-        public void AdicionarItem(decimal valor)
-        {
-            Guard.AgaintNull(valor, nameof(valor));
-            Guard.Againts<DomainException>(valor <= 0, "O ValorToal não pode ser zero");
-            ValorTotal += valor;
+            var item = new ItemPedido(produtoId, nomeProduto, quantidade, precoUnitario);
+            _Items.Add(item);
+            CalcularTotal();
             SetDataAtualizacao();
+
         }
+
         public void AdicionarItem(ItemPedido item)
         {
             Guard.AgaintNull(item, nameof(item));

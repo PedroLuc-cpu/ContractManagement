@@ -25,6 +25,14 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="13.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Scrutor" Version="6.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="9.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="9.0.6" />
@@ -33,11 +41,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ContractManagement.Persistence\ContractManagement.Persistence.csproj" />
-    <ProjectReference Include="..\..\ContractManagement.Presentation\ContractManagement.Presentation.csproj" />
     <ProjectReference Include="..\ContractManagement.Application\ContractManagement.Application.csproj" />
     <ProjectReference Include="..\ContractManagement.Domain\ContractManagement.Domain.csproj" />
     <ProjectReference Include="..\ContractManagement.Infrastructure\ContractManagement.Infrastructure.csproj" />
+    <ProjectReference Include="..\ContractManagement.Persistence\ContractManagement.Persistence.csproj" />
+    <ProjectReference Include="..\ContractManagement.Presentation\ContractManagement.Presentation.csproj" />
   </ItemGroup>
 
 </Project>
