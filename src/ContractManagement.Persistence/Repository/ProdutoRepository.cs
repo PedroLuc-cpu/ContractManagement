@@ -2,6 +2,7 @@
 using ContractManagement.Domain.Entity;
 using ContractManagement.Domain.Interfaces.Repository;
 using ContractManagement.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace ContractManagement.Persistence.Repository
 {
@@ -26,9 +27,12 @@ namespace ContractManagement.Persistence.Repository
 
         }
 
-        public Task<Produto?> GetByCodigoAsync(string codigo, CancellationToken cancellationToken = default)
+        public async Task<Produto?> GetByCodigoAsync(string codigo, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var produto = await _dbSet.Where(p => p.Codigo == codigo)
+                .FirstOrDefaultAsync(cancellationToken);
+            return produto;
+
         }
     }
 }

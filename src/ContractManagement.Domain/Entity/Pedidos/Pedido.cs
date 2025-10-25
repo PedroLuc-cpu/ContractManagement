@@ -16,23 +16,30 @@ namespace ContractManagement.Domain.Entity.Pedidos
 
         private Pedido() { }
 
-        public Pedido(Guid produtoId, string nomeProduto, int quantidade, decimal precoUnitario)
+        public Pedido(Guid idCliente)
         {
-            Guard.AgainstEmptyGuid(produtoId, nameof(produtoId));
-            Guard.AgaintNull(nomeProduto, nameof(nomeProduto));
-            Guard.Againts<DomainException>(quantidade <= 0, "A quantidade deve ser maior que zero");
-            Guard.Againts<DomainException>(precoUnitario <= 0, "O preço unitário deve ser maior que zero");
-            var item = new ItemPedido(produtoId, nomeProduto, quantidade, precoUnitario);
-            _Items.Add(item);
-            CalcularTotal();
-            SetDataAtualizacao();
-
+            Guard.AgainstEmptyGuid(idCliente, nameof(idCliente));
+            IdCliente = idCliente;
+            Numero = Guid.NewGuid().ToString().Replace("-", "")[..8].ToUpper();
         }
 
-        public void AdicionarItem(ItemPedido item)
+        public void AdicionarItem(Guid idProduto, string nomeProduto, int quantidade, decimal precoUnitario)
         {
-            Guard.AgaintNull(item, nameof(item));
-            _Items.Add(item);
+            Guard.AgainstEmptyGuid(idProduto, nameof(idProduto));
+            Guard.Againts<DomainException>(quantidade <= 0, "Quantidade deve ser maior que zero.");
+            Guard.Againts<DomainException>(precoUnitario <= 0, "Preço unitário deve ser maior que zero.");
+
+            var itemExistente = _Items.FirstOrDefault(i => i.IdProduto == idProduto);
+
+            if (itemExistente != null)
+            {
+                itemExistente.AtualizarQuantidade(itemExistente.Quantidade + quantidade);
+            }
+            else
+            {
+                var novoItem = new ItemPedido(idProduto, nomeProduto, quantidade, precoUnitario);
+                _Items.Add(novoItem);
+            }
         }
         public void RemoverItem(Guid idProduto)
         {

@@ -14,7 +14,8 @@ namespace ContractManagement.Persistence.Repository
 
         public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken) => await _dbSet.ToListAsync(cancellationToken);
 
-        public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) => await _dbSet.Where(b => b.Equals(id)).FirstOrDefaultAsync(cancellationToken);
+        public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+            => await _dbSet.FirstOrDefaultAsync(b => EF.Property<Guid>(b, "Id") == id, cancellationToken);
         public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default) =>
             await _dbSet.Where(b => b.Equals(entity)).ExecuteUpdateAsync(
                 setters => setters.SetProperty(b => b.Equals(entity), entity.Equals(entity)), cancellationToken);

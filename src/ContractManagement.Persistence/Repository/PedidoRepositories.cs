@@ -1,27 +1,21 @@
 ﻿using ContractManagement.Domain.Entity.Pedidos;
-using ContractManagement.Domain.Interfaces.Repository.Clientes;
 using ContractManagement.Domain.Interfaces.Repository.Pedidos;
 using ContractManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace ContractManagement.Persistence.Repository
 {
-    public class PedidoRepositories(ContractManagementContext context, IClienteRepository clienteRepository) : BaseRepository<Pedido>(context), IPedidoRepository
+    public class PedidoRepositories(ContractManagementContext context) : BaseRepository<Pedido>(context), IPedidoRepository
     {
-        private readonly IClienteRepository _clienteRepository = clienteRepository;
         public async Task Adicionar(Pedido pedido, CancellationToken cancellationToken = default)
         {
-            var cliente =  await _clienteRepository.GetByIdAsync(pedido.IdCliente);
-
-
-
             await _dbSet.AddAsync(pedido, cancellationToken);
         }
-
         public async Task<IEnumerable<Pedido>> ListaPaginada(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
             var orders = await _dbSet.AsNoTracking()
                 .Include(item => item.Items)
+                .Include(item => item.IdCliente)
                 .OrderBy(d => d.DataCriacao)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
@@ -35,6 +29,7 @@ namespace ContractManagement.Persistence.Repository
             
             var pedidoItems = await _dbSet
                 .Include(p => p.Items)
+                .Include(item => item.IdCliente)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (pedidoItems is not null)
@@ -42,6 +37,11 @@ namespace ContractManagement.Persistence.Repository
                 return pedidoItems;
             }
             throw new KeyNotFoundException("Pedido não encontrado");
+        }
+
+        public Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            return _context.SaveChangesAsync(cancellationToken);
         }
     }
 }
