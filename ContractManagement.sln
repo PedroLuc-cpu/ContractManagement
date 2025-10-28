@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContractManagement.Persiste
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContractManagement.Presentation", "src\ContractManagement.Presentation\ContractManagement.Presentation.csproj", "{14BB53E2-C95A-7451-9286-95BC7A1926A3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContractManagement.Domain.Test", "ContractManagement.Test\ContractManagement.Domain.Test.csproj", "{04DB7CD1-AE1E-4394-A953-C4BA9EA20661}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,9 +49,16 @@ Global
 		{14BB53E2-C95A-7451-9286-95BC7A1926A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14BB53E2-C95A-7451-9286-95BC7A1926A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14BB53E2-C95A-7451-9286-95BC7A1926A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04DB7CD1-AE1E-4394-A953-C4BA9EA20661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04DB7CD1-AE1E-4394-A953-C4BA9EA20661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04DB7CD1-AE1E-4394-A953-C4BA9EA20661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04DB7CD1-AE1E-4394-A953-C4BA9EA20661}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{04DB7CD1-AE1E-4394-A953-C4BA9EA20661} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1806BCBC-FFCF-424D-9438-334ED71F1D9E}
