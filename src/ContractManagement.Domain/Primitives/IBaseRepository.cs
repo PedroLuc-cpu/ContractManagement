@@ -4,7 +4,7 @@
     /// Interface genérica para repositórios de agregados.
     /// Apenas entidades que implementam IAggregateRoot podem ser usadas.
     /// </summary>
-    public interface IBaseRepository<T> where T : IAggregateRoot
+    public interface IBaseRepository<T> where T : AggregateRoot
     {
         Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
         Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);

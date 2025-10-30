@@ -1,6 +1,4 @@
-﻿using ContractManagement.Domain.Common.Base;
-using ContractManagement.Domain.Common.Validations;
-using ContractManagement.Domain.Entity.Enderecos;
+﻿using ContractManagement.Domain.Common.Validations;
 using ContractManagement.Domain.Erros;
 using ContractManagement.Domain.Primitives;
 using ContractManagement.Domain.Shared;
@@ -8,22 +6,25 @@ using ContractManagement.Domain.ValueObjects;
 
 namespace ContractManagement.Domain.Entity.Clientes
 {
-    public class Cliente : EntityBase, IAggregateRoot
+    public class Cliente : AggregateRoot
     {
-        public Cliente(FirstName nome, LastName lastName, Email email, Endereco? endereco)
+        public static Cliente Create (FirstName nome, LastName lastName, Email email, Endereco? endereco)
         {
             Guard.AgaintNull(nome, nameof(nome));
             Guard.AgaintNull(lastName, nameof(lastName));   
             Guard.AgaintNull(email, nameof(email)); 
-            Id = Guid.NewGuid();
-            Nome = nome;
+            var cliente = new Cliente(nome, lastName, email, endereco);
+            return cliente;
+        }
+        protected Cliente(): base(id: Guid.Empty) { }
+        private Cliente(FirstName nome, LastName lastName, Email email, Endereco? endereco) : base(Guid.NewGuid()) {
+            FirstName = nome;
             LastName = lastName;
             Email = email;
             Endereco = endereco;
         }
-        private Cliente() { }
 
-        public FirstName Nome { get; private set; }
+        public FirstName FirstName { get; private set; }
         public LastName LastName { get; private set; }
         public Email Email { get; private set; }
         public Endereco? Endereco { get; private set; }
@@ -38,7 +39,7 @@ namespace ContractManagement.Domain.Entity.Clientes
             Endereco = null;
             SetDataAtualizacao();
         }
-        public static Result<Cliente> AtualizarCliente(FirstName firstName, LastName lastName, Email email)
+        public static Result<Cliente> AtualizarCliente(FirstName firstName, LastName lastName, Email email, Endereco? endereco)
         {
             if (string.IsNullOrEmpty(firstName.Value))
             {
@@ -52,12 +53,8 @@ namespace ContractManagement.Domain.Entity.Clientes
             {
                 return Result.Failure<Cliente>(DomainErrors.Email.Empty);
             }
-            var cliente = new Cliente
-            {
-                Nome = firstName,
-                LastName = lastName,
-                Email = email
-            };
+            var cliente = Create(firstName, lastName, email, endereco);
+
             return Result.Success(cliente);
         }
     }

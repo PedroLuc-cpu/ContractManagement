@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Query\**" />
     <Compile Remove="Validators\**" />
+    <EmbeddedResource Remove="Query\**" />
     <EmbeddedResource Remove="Validators\**" />
+    <None Remove="Query\**" />
     <None Remove="Validators\**" />
   </ItemGroup>
 
@@ -19,6 +22,12 @@
   <ItemGroup>
     <PackageReference Include="Marten" Version="8.13.2" />
     <PackageReference Include="MediatR" Version="13.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Client\Query\" />
+    <Folder Include="Product\Command\Event\" />
+    <Folder Include="Product\Query\" />
   </ItemGroup>
 
 </Project>

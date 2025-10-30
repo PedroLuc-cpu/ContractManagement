@@ -22,59 +22,7 @@ namespace ContractManagement.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ContractManagement.Domain.Entity.Clientes.Cliente", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DataAtualizao")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("dt_update");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("dt_created");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("clientes", (string)null);
-                });
-
-            modelBuilder.Entity("ContractManagement.Domain.Entity.Pedidos.Pedido", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DataAtualizao")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("dt_update");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("dt_created");
-
-                    b.Property<Guid>("IdCliente")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Numero")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("ValorTotal")
-                        .HasColumnType("numeric")
-                        .HasColumnName("valor_total");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Numero")
-                        .IsUnique();
-
-                    b.ToTable("pedido", (string)null);
-                });
-
-            modelBuilder.Entity("ContractManagement.Domain.Entity.Produto", b =>
+            modelBuilder.Entity("ContractManagement.Domain.Entity.Catalogo.Produto", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -129,16 +77,6 @@ namespace ContractManagement.Infrastructure.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("obersavao");
 
-                    b.Property<decimal>("PrecoCusto")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)")
-                        .HasColumnName("preco_custo");
-
-                    b.Property<decimal>("PrecoVenda")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)")
-                        .HasColumnName("preco_venda");
-
                     b.Property<string>("UnidadeMedida")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -152,7 +90,200 @@ namespace ContractManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("ContractManagement.Domain.Entity.Clientes.Cliente", b =>
                 {
-                    b.OwnsOne("ContractManagement.Domain.Entity.Enderecos.Endereco", "Endereco", b1 =>
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DataAtualizao")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("dt_update");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("dt_created");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("clientes", (string)null);
+                });
+
+            modelBuilder.Entity("ContractManagement.Domain.Entity.Pedidos.Pedido", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DataAtualizao")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("dt_update");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("dt_created");
+
+                    b.Property<Guid>("IdCliente")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id_cliente");
+
+                    b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("numero_pedido");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Numero")
+                        .IsUnique();
+
+                    b.ToTable("pedido", (string)null);
+                });
+
+            modelBuilder.Entity("ContractManagement.Domain.Entity.Catalogo.Produto", b =>
+                {
+                    b.OwnsOne("ContractManagement.Domain.ValueObjects.Money", "PrecoCusto", b1 =>
+                        {
+                            b1.Property<Guid>("ProdutoId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Coin")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<decimal>("Value")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("numeric(18,2)")
+                                .HasColumnName("preco_custo");
+
+                            b1.HasKey("ProdutoId");
+
+                            b1.ToTable("produtos");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProdutoId");
+                        });
+
+                    b.OwnsOne("ContractManagement.Domain.ValueObjects.Money", "PrecoVenda", b1 =>
+                        {
+                            b1.Property<Guid>("ProdutoId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Coin")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<decimal>("Value")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("numeric(18,2)")
+                                .HasColumnName("preco_venda");
+
+                            b1.HasKey("ProdutoId");
+
+                            b1.ToTable("produtos");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProdutoId");
+                        });
+
+                    b.OwnsOne("ContractManagement.Domain.ValueObjects.HorarioDisponibilidade", "Disponibilidade", b1 =>
+                        {
+                            b1.Property<Guid>("ProdutoId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<TimeSpan>("Fim")
+                                .HasColumnType("interval")
+                                .HasColumnName("fim");
+
+                            b1.Property<TimeSpan>("Inicio")
+                                .HasColumnType("interval")
+                                .HasColumnName("inicio");
+
+                            b1.HasKey("ProdutoId");
+
+                            b1.ToTable("disponibilidade_produto", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProdutoId");
+                        });
+
+                    b.OwnsOne("ContractManagement.Domain.ValueObjects.Promocao", "Promocao", b1 =>
+                        {
+                            b1.Property<Guid>("ProdutoId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<decimal>("DescontoPercentual")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("numeric(18,2)")
+                                .HasColumnName("desconto_percentual");
+
+                            b1.HasKey("ProdutoId");
+
+                            b1.ToTable("promocao_produto", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProdutoId");
+
+                            b1.OwnsOne("ContractManagement.Domain.ValueObjects.PeriodoPromocional", "Periodo", b2 =>
+                                {
+                                    b2.Property<Guid>("PromocaoProdutoId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<DateTime>("Fim")
+                                        .HasColumnType("timestamp with time zone")
+                                        .HasColumnName("fim");
+
+                                    b2.Property<DateTime>("Inicio")
+                                        .HasColumnType("timestamp with time zone")
+                                        .HasColumnName("inicio");
+
+                                    b2.HasKey("PromocaoProdutoId");
+
+                                    b2.ToTable("promocao_produto");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("PromocaoProdutoId");
+                                });
+
+                            b1.Navigation("Periodo")
+                                .IsRequired();
+                        });
+
+                    b.Navigation("Disponibilidade");
+
+                    b.Navigation("PrecoCusto")
+                        .IsRequired();
+
+                    b.Navigation("PrecoVenda")
+                        .IsRequired();
+
+                    b.Navigation("Promocao");
+                });
+
+            modelBuilder.Entity("ContractManagement.Domain.Entity.Clientes.Cliente", b =>
+                {
+                    b.OwnsOne("ContractManagement.Domain.ValueObjects.Email", "Email", b1 =>
+                        {
+                            b1.Property<Guid>("ClienteId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("email");
+
+                            b1.HasKey("ClienteId");
+
+                            b1.HasIndex("Value")
+                                .IsUnique();
+
+                            b1.ToTable("clientes");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ClienteId");
+                        });
+
+                    b.OwnsOne("ContractManagement.Domain.ValueObjects.Endereco", "Endereco", b1 =>
                         {
                             b1.Property<Guid>("ClienteId")
                                 .HasColumnType("uuid");
@@ -190,28 +321,6 @@ namespace ContractManagement.Infrastructure.Migrations
                             b1.HasKey("ClienteId");
 
                             b1.ToTable("enderecos", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("ClienteId");
-                        });
-
-                    b.OwnsOne("ContractManagement.Domain.ValueObjects.Email", "Email", b1 =>
-                        {
-                            b1.Property<Guid>("ClienteId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
-                                .HasColumnName("email");
-
-                            b1.HasKey("ClienteId");
-
-                            b1.HasIndex("Value")
-                                .IsUnique();
-
-                            b1.ToTable("clientes");
 
                             b1.WithOwner()
                                 .HasForeignKey("ClienteId");
@@ -269,6 +378,27 @@ namespace ContractManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("ContractManagement.Domain.Entity.Pedidos.Pedido", b =>
                 {
+                    b.OwnsOne("ContractManagement.Domain.ValueObjects.Money", "ValorTotal", b1 =>
+                        {
+                            b1.Property<Guid>("PedidoId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Coin")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<decimal>("Value")
+                                .HasColumnType("numeric")
+                                .HasColumnName("valor_total");
+
+                            b1.HasKey("PedidoId");
+
+                            b1.ToTable("pedido");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PedidoId");
+                        });
+
                     b.OwnsMany("ContractManagement.Domain.ValueObjects.ItemPedido", "Items", b1 =>
                         {
                             b1.Property<Guid>("Id")
@@ -281,10 +411,6 @@ namespace ContractManagement.Infrastructure.Migrations
 
                             b1.Property<Guid>("PedidoId")
                                 .HasColumnType("uuid");
-
-                            b1.Property<decimal>("PrecoUnitario")
-                                .HasColumnType("numeric")
-                                .HasColumnName("preco_unitario");
 
                             b1.Property<string>("Produto")
                                 .IsRequired()
@@ -304,9 +430,57 @@ namespace ContractManagement.Infrastructure.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("PedidoId");
+
+                            b1.OwnsOne("ContractManagement.Domain.ValueObjects.Money", "PrecoUnitario", b2 =>
+                                {
+                                    b2.Property<Guid>("ItemPedidoId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<string>("Coin")
+                                        .IsRequired()
+                                        .HasColumnType("text");
+
+                                    b2.Property<decimal>("Value")
+                                        .HasColumnType("numeric")
+                                        .HasColumnName("preco_unitario");
+
+                                    b2.HasKey("ItemPedidoId");
+
+                                    b2.ToTable("item_pedido");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("ItemPedidoId");
+                                });
+
+                            b1.Navigation("PrecoUnitario")
+                                .IsRequired();
+                        });
+
+                    b.OwnsOne("ContractManagement.Domain.ValueObjects.OrderStatus", "Status", b1 =>
+                        {
+                            b1.Property<Guid>("PedidoId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Status")
+                                .IsRequired()
+                                .HasColumnType("varchar(10)")
+                                .HasColumnName("status");
+
+                            b1.HasKey("PedidoId");
+
+                            b1.ToTable("pedido");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PedidoId");
                         });
 
                     b.Navigation("Items");
+
+                    b.Navigation("Status")
+                        .IsRequired();
+
+                    b.Navigation("ValorTotal")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

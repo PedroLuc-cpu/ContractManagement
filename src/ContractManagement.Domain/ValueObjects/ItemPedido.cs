@@ -1,7 +1,7 @@
 ﻿using ContractManagement.Domain.Common.Base;
 using ContractManagement.Domain.Common.Exceptions;
 using ContractManagement.Domain.Common.Validations;
-using ContractManagement.Domain.Entity;
+using ContractManagement.Domain.Entity.Catalogo;
 
 namespace ContractManagement.Domain.ValueObjects
 {
@@ -10,18 +10,18 @@ namespace ContractManagement.Domain.ValueObjects
         public Guid IdProduto { get; private set; }
         public string Produto { get; private set; } = string.Empty;
         public int Quantidade { get; private set; }
-        public decimal PrecoUnitario { get; private set; }
+        public Money PrecoUnitario { get; private set; }
         private readonly List<ItemPedido> _items = [];
         public IReadOnlyCollection<ItemPedido> Items => _items.AsReadOnly();
 
         private ItemPedido() { }
 
-        public ItemPedido(Guid produtoId, string nomeProduto, int quantidade, decimal precoUnitario)
+        public ItemPedido(Guid produtoId, string nomeProduto, int quantidade, Money precoUnitario)
         {
             Guard.AgainstEmptyGuid(produtoId, nameof(produtoId));
             Guard.AgaintNull(nomeProduto, nameof(nomeProduto));
             Guard.Againts<DomainException>(quantidade <= 0, "Quantidade deve ser maior que zero.");
-            Guard.Againts<DomainException>(precoUnitario <= 0, "Preço unitário deve ser maior que zero.");
+            Guard.Againts<DomainException>(precoUnitario.Value <= 0, "Preço unitário deve ser maior que zero.");
 
             IdProduto = produtoId;
             Produto = nomeProduto;
@@ -35,7 +35,7 @@ namespace ContractManagement.Domain.ValueObjects
             _items.Add(item);
         }
 
-        public decimal SubTotal => Quantidade * PrecoUnitario;
+        public decimal SubTotal => Quantidade * PrecoUnitario.Value;
         public void AtualizarQuantidade(int novaQuantidade)
         {
             Guard.Againts<DomainException>(novaQuantidade <= 0, "Quantidade inválida");

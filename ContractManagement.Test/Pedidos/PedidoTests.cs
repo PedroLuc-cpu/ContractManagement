@@ -1,4 +1,5 @@
 ﻿using ContractManagement.Domain.Entity.Pedidos;
+using ContractManagement.Domain.ValueObjects;
 
 namespace ContractManagement.Domain.Test.Pedidos
 {
@@ -9,30 +10,30 @@ namespace ContractManagement.Domain.Test.Pedidos
         {
             // Arrange
             var clienteId = Guid.NewGuid();
-            var pedido = new Pedido(clienteId);
+            var pedido = Pedido.Create(clienteId);
             // Act
             var status = pedido.Status;
             // Assert
-            Assert.Equal(Enums.StatusPedidoEnum.Pendente, status);
+            Assert.Equal(OrderStatus.Pendente, status);
         }
         [Fact]
         public void AprovarPedidoDeveAlterarStatusParaAprovado()
         {
             // Arrange
             var clienteId = Guid.NewGuid();
-            var pedido = new Pedido(clienteId);
+            var pedido = Pedido.Create(clienteId);
             // Act
             pedido.AprovarPedido();
             var status = pedido.Status;
             // Assert
-            Assert.Equal(Enums.StatusPedidoEnum.Aprovado, status);
+            Assert.Equal(OrderStatus.Aprovado, status);
         }
         [Fact]
         public void AdicionarItemDeveAdicionarItemAoPedido()
         {
             // Arrange
             var clienteId = Guid.NewGuid();
-            var pedido = new Pedido(clienteId);
+            var pedido = Pedido.Create(clienteId);
             var produtoId = Guid.NewGuid();
             var nomeProduto = "Produto Teste";
             var quantidade = 2;
@@ -44,7 +45,7 @@ namespace ContractManagement.Domain.Test.Pedidos
             Assert.Single(itens);
             Assert.Equal(produtoId, itens.First().IdProduto);
             Assert.Equal(quantidade, itens.First().Quantidade);
-            Assert.Equal(precoUnitario, itens.First().PrecoUnitario);
+            Assert.Equal(Money.Create(precoUnitario).Value, itens.First().PrecoUnitario);
         }
     }        
 }

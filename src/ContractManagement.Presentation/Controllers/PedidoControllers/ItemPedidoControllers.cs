@@ -1,4 +1,4 @@
-﻿using ContractManagement.Application.Command.Order;
+﻿using ContractManagement.Application.Order.Command;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

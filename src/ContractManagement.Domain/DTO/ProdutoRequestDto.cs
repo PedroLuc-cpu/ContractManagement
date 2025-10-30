@@ -11,8 +11,11 @@
         int EstoqueAtual,
         int EstoqueMinino,
         int EstoqueMaximo,
-        bool Ativo
+        bool Ativo,
+        PromocaoResquetDTO? Promocao
     )
     {
     }
+
+    public sealed record PromocaoResquetDTO(decimal DescontoPercentual, DateTime Inicio, DateTime Fim);
 }

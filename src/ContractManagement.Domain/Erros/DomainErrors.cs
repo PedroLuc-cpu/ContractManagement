@@ -43,5 +43,37 @@ namespace ContractManagement.Domain.Erros
                 "LastName.TooLong",
                 "Last name is too long.");
         }
+        public static class Password
+        {
+            public static readonly Error Empty = new(
+                "Password.Empty",
+                "Password is empty.");
+            public static readonly Error TooShort = new(
+                "Password.TooShort",
+                "Password is too short.");
+        }
+
+        public static class UserName
+        {
+            public static readonly Error Empty = new(
+                "UserName.Empty",
+                "User name is empty.");
+            public static readonly Error TooLong = new(
+                "UserName.TooLong",
+                "User name is too long.");
+        }
+        public static class Role
+        {
+            public static readonly Error NameEmpty = new(
+                "Role.NameEmpty",
+                "Role name is empty.");
+        }
+        public static class Money
+        {
+            public static readonly Error NegativeValue = new(
+                "Money.NegativeValue",
+                "Monetary value cannot be negative.");
+        }
+
     }
 }

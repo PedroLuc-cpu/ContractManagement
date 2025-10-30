@@ -12,7 +12,7 @@ namespace ContractManagement.Infrastructure.Persistence.Configurations
             builder.HasKey(c => c.Id);
             builder.Property(c => c.DataCriacao).HasColumnName("dt_created").IsRequired();
             builder.Property(c => c.DataAtualizao).HasColumnName("dt_update");
-            builder.OwnsOne(c => c.Nome, nome =>
+            builder.OwnsOne(c => c.FirstName, nome =>
             {
                 nome.Property(n => n.Value).HasColumnName("nome").HasMaxLength(50).IsRequired();
             });

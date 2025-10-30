@@ -1,7 +1,7 @@
 ﻿using ContractManagement.Domain.DTO;
 using ContractManagement.Domain.Entity.Clientes;
-using ContractManagement.Domain.Entity.Enderecos;
 using ContractManagement.Domain.Primitives;
+using ContractManagement.Domain.ValueObjects;
 
 namespace ContractManagement.Domain.Interfaces.Repository.Clientes
 {

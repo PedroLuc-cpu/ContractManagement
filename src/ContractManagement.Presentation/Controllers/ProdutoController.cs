@@ -1,15 +1,18 @@
-﻿using ContractManagement.Domain.DTO;
-using ContractManagement.Domain.Entity;
+﻿using ContractManagement.Application.Product.Command;
+using ContractManagement.Domain.DTO;
+using ContractManagement.Domain.Entity.Catalogo;
 using ContractManagement.Domain.Interfaces.Repository;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContractManagement.Presentation.Controllers
 {
     [Route("produto")]
     [Produces("application/json")]
-    public sealed class ProdutoController(IProdutoRepository produtoRepository) : MainController
+    public sealed class ProdutoController(IProdutoRepository produtoRepository, ISender sender) : MainController
     {
         private readonly IProdutoRepository _produtoRepository = produtoRepository;
+        private readonly ISender _sender = sender;
 
         [HttpPost]
         [ProducesResponseType(typeof(Produto), 201)]
@@ -73,5 +76,41 @@ namespace ContractManagement.Presentation.Controllers
                 return CustomResponse();
             }
         }
+        [HttpPut]
+        [ProducesResponseType(typeof(Produto), 200)]
+        public async Task<IActionResult> Update([FromBody] ProdutoRequestDto produto, CancellationToken cancellationToken)
+        {
+            LimparErrosProcessamento();
+            try
+            {
+                var produtoExist = await _produtoRepository.GetByCodigoAsync(produto.Codigo, cancellationToken);
+                if (produtoExist is null)
+                {
+                    AdicionarErroProcessamento("Nâo foi encontrado nenhum produto com código informado");
+                    return CustomResponse();
+                }
+                await _produtoRepository.UpdateProduto(produto, cancellationToken);
+                return Ok(produtoExist);
+            }
+            catch (Exception ex)
+            {
+            
+                AdicionarErroProcessamento(ex.Message);
+                return CustomResponse();
+                
+            }
+        }
+
+
+        [HttpPost("criar-promocao")]
+
+        [ProducesResponseType(typeof(IEnumerable<Produto>), 201)]
+        public async Task<IActionResult> CriarPromocao([FromBody] CreatePromotionCommand command, CancellationToken cancellationToken)
+        {
+            var result = await _sender.Send(command, cancellationToken);
+            return result.IsSuccess ? Ok(command) : BadRequest(result.Error);
+        }
+
+
     }
 }

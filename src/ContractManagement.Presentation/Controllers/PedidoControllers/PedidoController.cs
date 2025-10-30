@@ -56,8 +56,8 @@ namespace ContractManagement.Presentation.Controllers.PedidoControllers
             try
             {
                 var pedido = await _pedidoRepository.GetByIdAsync(id);
-                if (pedido is not { ValorTotal: >= 0, Numero: "" })
-                if (pedido is { })
+                if (pedido is not { Numero: "" })
+                if (pedido is not null)
                 if (pedido.Id.Equals(id))
                 {
                     return Ok(pedido);

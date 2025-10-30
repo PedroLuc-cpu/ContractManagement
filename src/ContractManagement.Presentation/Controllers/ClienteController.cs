@@ -102,7 +102,7 @@ namespace ContractManagement.Presentation.Controllers
             LimparErrosProcessamento();
             try
             {
-                var existingClient = await _clienteRepository.GetByEmailAsync(cliente.Email, cancellationToken);
+                var existingClient = await _clienteRepository.GetByEmailAsync(cliente.Email.Value, cancellationToken);
                 if (existingClient is null)
                 {
                     AdicionarErroProcessamento("Cliente não encontrado.");

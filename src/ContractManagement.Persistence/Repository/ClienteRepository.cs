@@ -1,6 +1,5 @@
 ﻿using ContractManagement.Domain.DTO;
 using ContractManagement.Domain.Entity.Clientes;
-using ContractManagement.Domain.Entity.Enderecos;
 using ContractManagement.Domain.Interfaces.Repository.Clientes;
 using ContractManagement.Domain.ValueObjects;
 using ContractManagement.Infrastructure.Persistence;
@@ -27,7 +26,7 @@ namespace ContractManagement.Persistence.Repository
                 throw new ArgumentException(emailResult.Error);
             }
 
-            var cliente = new Cliente(nomeResult.Value, sobrenomeResult.Value, emailResult.Value, endereco);
+            var cliente = Cliente.Create(nomeResult.Value, sobrenomeResult.Value, emailResult.Value, endereco);
             await _dbSet.AddAsync(cliente, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -36,7 +35,7 @@ namespace ContractManagement.Persistence.Repository
         public async Task<IEnumerable<Cliente>> GetAllClientsAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
             var clients = await _dbSet.AsNoTracking()
-                .OrderBy(c => c.Nome.Value)
+                .OrderBy(c => c.FirstName.Value)
                 .OrderByDescending(c => c.DataCriacao)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
@@ -53,13 +52,10 @@ namespace ContractManagement.Persistence.Repository
 
         public async Task UpdateClientAsync(ClienteUpdateRequestDto cliente, CancellationToken cancellationToken = default)
         {
-            
-                await _dbSet.Where(c => c.Email.Value == cliente.Email)
-                .ExecuteUpdateAsync(set => set.SetProperty(c => c.Nome.Value, cliente.Nome)
-                                        .SetProperty(c => c.LastName.Value, cliente.Sobrenome)
-                                        .SetProperty(c => c.Email.Value, cliente.Email)
-                                        //.SetProperty(c => c.Endereco, cliente.Endereco)
-                                        .SetProperty(c => c.DataAtualizao, DateTime.UtcNow), cancellationToken);
+            var cs = Cliente.AtualizarCliente(cliente.FirstName, cliente.LastName, cliente.Email, cliente.Endereco);
+
+            await _dbSet.ExecuteUpdateAsync(set => set
+                .SetProperty(c => c, cs.Value), cancellationToken);
         }
     }
 }

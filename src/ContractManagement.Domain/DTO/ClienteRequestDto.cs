@@ -1,4 +1,4 @@
-﻿using ContractManagement.Domain.Entity.Enderecos;
+﻿using ContractManagement.Domain.ValueObjects;
 
 namespace ContractManagement.Domain.DTO
 {
@@ -11,10 +11,10 @@ namespace ContractManagement.Domain.DTO
     {
     }
     public sealed record ClienteUpdateRequestDto(
-        string Nome,
-        string Sobrenome,
-        string Email
-    //Endereco Endereco
+        FirstName FirstName,
+        LastName LastName,
+        Email Email,
+        Endereco Endereco
     )
     {
         public sealed record ClienteResponseDto(
