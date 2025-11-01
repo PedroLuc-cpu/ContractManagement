@@ -1,6 +1,7 @@
 ﻿using ContractManagement.Application.Product.Command;
 using ContractManagement.Domain.DTO;
 using ContractManagement.Domain.Entity.Catalogo;
+using ContractManagement.Domain.Interfaces;
 using ContractManagement.Domain.Interfaces.Repository;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,11 @@ namespace ContractManagement.Presentation.Controllers
 {
     [Route("produto")]
     [Produces("application/json")]
-    public sealed class ProdutoController(IProdutoRepository produtoRepository, ISender sender) : MainController
+    public sealed class ProdutoController(IProdutoRepository produtoRepository, ISender sender, IRedisCacheRepository redisCacheRepository) : MainController
     {
         private readonly IProdutoRepository _produtoRepository = produtoRepository;
         private readonly ISender _sender = sender;
+        private readonly IRedisCacheRepository _redisCacheRepository = redisCacheRepository;
 
         [HttpPost]
         [ProducesResponseType(typeof(Produto), 201)]
@@ -59,16 +61,20 @@ namespace ContractManagement.Presentation.Controllers
         }
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Produto>), 200)]
-        public async Task<IActionResult> ObterProdutos(IDistributedCache cache)
+        public async Task<IActionResult> ObterProdutos()
         {
             LimparErrosProcessamento();
             try
             {
-                var produtos = await _produtoRepository.GetAllAsync();
-                if (!produtos.Any())
+                var produtos = _redisCacheRepository.GetData<IEnumerable<Produto>>("produtos");
+
+                produtos = await _produtoRepository.GetAllAsync();
+
+                if (produtos is null)
                 {
                     return CustomResponse("Nenhum produto encontrado.");
                 }
+                _redisCacheRepository.SetData("produtos", produtos);
                 return Ok(produtos);
             }
             catch (Exception ex)
