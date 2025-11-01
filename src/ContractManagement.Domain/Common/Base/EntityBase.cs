@@ -14,9 +14,10 @@
     /// implementadas para comparar instâncias de <see cref="EntityBase"/>.</remarks>
     public abstract class EntityBase: IEquatable<EntityBase>
     {
-        protected EntityBase(Guid id)
+        protected EntityBase(Guid id, DateTime dataCriacao)
         {
             Id = id;
+            DataCriacao = dataCriacao;
         }
         public Guid Id { get; protected init; }
         public DateTime DataCriacao { get; protected set; }

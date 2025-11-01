@@ -1,4 +1,5 @@
 using ContractManagement.Api.Configuration;
+using ContractManagement.Api.Extensions;
 using ContractManagement.Api.OptionSetup;
 using ContractManagement.Infrastructure.Options;
 using ContractManagement.Infrastructure.Persistence;
@@ -26,6 +27,10 @@ builder.Services.AddDbContext<ContractManagementContext>((serviceProvider, dbCon
     dbContextOptionsBuilder.EnableDetailedErrors(false);
     dbContextOptionsBuilder.EnableSensitiveDataLogging(true);
 });
+
+builder.Services.AddStackExchangeRedisCache(options =>
+    options.Configuration = builder.Configuration.GetConnectionString("Cache")
+);
 
 builder.Services.AddMarten(options =>
 {
@@ -66,6 +71,11 @@ if (builder.Environment.EnvironmentName != "Testing")
 }
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.ApplyMigration();
+}
 
 app.UseSwaggerConfiguration(builder.Environment);
 

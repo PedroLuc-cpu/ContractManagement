@@ -4,6 +4,7 @@ using ContractManagement.Domain.Entity.Catalogo;
 using ContractManagement.Domain.Interfaces.Repository;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace ContractManagement.Presentation.Controllers
 {
@@ -56,9 +57,9 @@ namespace ContractManagement.Presentation.Controllers
                 return CustomResponse();
             }
         }
-        [HttpGet("produtos")]
+        [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Produto>), 200)]
-        public async Task<IActionResult> ObterProdutos()
+        public async Task<IActionResult> ObterProdutos(IDistributedCache cache)
         {
             LimparErrosProcessamento();
             try

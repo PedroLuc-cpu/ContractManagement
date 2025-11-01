@@ -21,7 +21,7 @@ namespace ContractManagement.Domain.Entity.Catalogo
         public Promocao? Promocao { get; private set; }
         public HorarioDisponibilidade? Disponibilidade { get; private set; }
 
-        protected Produto(): base(id: Guid.Empty) { }
+        protected Produto(): base(id: Guid.Empty, dataCriacao: DateTime.UtcNow) { }
         private Produto(string nome,
             string unidadeMedida,
             string codigoBarras,
@@ -33,7 +33,7 @@ namespace ContractManagement.Domain.Entity.Catalogo
             int estoqueMinino,
             int estoqueMaximo,
             bool ativo
-            ): base(Guid.NewGuid())
+            ): base(Guid.NewGuid(), dataCriacao: DateTime.UtcNow)
         {
             Nome = nome;
             Observacao = observacao;

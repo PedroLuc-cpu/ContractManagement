@@ -1,0 +1,33 @@
+services:
+  contractmanagement.api:
+    image: ${DOCKER_REGISTRY-}contractmanagementapi
+    container_name: contractmanagementapi.api
+    build:
+      context: .
+      dockerfile: src/ContractManagement.Api/Dockerfile
+    ports:
+        - "5000:5000"
+        - "5001:5001"
+  contractmanagement.database:
+    image: postgres:latest
+    container_name: contractmanagement-database
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: db_contractmanagement
+    volumes:
+      - contractmanagement_data:/var/lib/postgresql/data
+    
+  contractmanagement.cache:
+    image: redis:latest
+    restart: always
+    ports: 
+        - "6379:6379"
+volumes:
+  contractmanagement_data:
+        
+       
+    

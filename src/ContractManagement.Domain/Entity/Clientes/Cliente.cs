@@ -16,8 +16,8 @@ namespace ContractManagement.Domain.Entity.Clientes
             var cliente = new Cliente(nome, lastName, email, endereco);
             return cliente;
         }
-        protected Cliente(): base(id: Guid.Empty) { }
-        private Cliente(FirstName nome, LastName lastName, Email email, Endereco? endereco) : base(Guid.NewGuid()) {
+        protected Cliente(): base(id: Guid.Empty, dataCriacao: DateTime.UtcNow) { }
+        private Cliente(FirstName nome, LastName lastName, Email email, Endereco? endereco) : base(Guid.NewGuid(), dataCriacao: DateTime.UtcNow) {
             FirstName = nome;
             LastName = lastName;
             Email = email;

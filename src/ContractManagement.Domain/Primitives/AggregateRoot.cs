@@ -2,7 +2,7 @@
 
 namespace ContractManagement.Domain.Primitives
 {
-    public abstract class AggregateRoot(Guid id) : EntityBase(id)
+    public abstract class AggregateRoot(Guid id, DateTime dataCriacao) : EntityBase(id, dataCriacao)
     {
         private readonly List<IDomainEvent> _domainEvents = [];
         protected void RaiseDomainEvent(IDomainEvent domainEvent)

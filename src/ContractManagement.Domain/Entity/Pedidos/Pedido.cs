@@ -14,8 +14,8 @@ namespace ContractManagement.Domain.Entity.Pedidos
         private readonly List<ItemPedido> _Items = [];
         public IReadOnlyCollection<ItemPedido> Items => _Items.AsReadOnly();
 
-        protected Pedido(): base(id: Guid.Empty) { }
-        private Pedido(Guid idCliente, string numero, OrderStatus status): base(Guid.NewGuid()) {
+        protected Pedido(): base(id: Guid.Empty, dataCriacao: DateTime.UtcNow) { }
+        private Pedido(Guid idCliente, string numero, OrderStatus status): base(Guid.NewGuid(), dataCriacao: DateTime.UtcNow) {
             IdCliente = idCliente;
             Numero = numero;
             Status = status;
