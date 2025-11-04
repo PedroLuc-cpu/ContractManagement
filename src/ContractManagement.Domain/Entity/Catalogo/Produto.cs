@@ -116,11 +116,14 @@ namespace ContractManagement.Domain.Entity.Catalogo
             Disponibilidade = disponibilidade;
         }
 
-        public void AtualizarProduto(string nome, string unidadeMedida, string codigoBarras, string observacao)
+        public void AtualizarProduto(string nome, string unidadeMedida, string codigoBarras, string observacao, bool ativo)
         {
             Nome = nome;
+            UnidadeMedida = unidadeMedida;
             CodigoBarras = codigoBarras;
             Observacao = observacao;
+            Ativo = ativo;
+            SetDataAtualizacao();
         }
 
         public void AdicionarPromocao(Promocao promocao)

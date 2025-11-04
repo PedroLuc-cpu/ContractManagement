@@ -98,7 +98,8 @@ namespace ContractManagement.Presentation.Controllers
                     produtoUpdateReq.Cod,
                     produtoUpdateReq.Description,
                     produtoUpdateReq.UndMed,
-                    produtoUpdateReq.CodBarr);
+                    produtoUpdateReq.CodBarr,
+                    produtoUpdateReq.Active);
 
                 var result = await _sender.Send(command, cancellationToken);
                 return result.IsSuccess ? Ok("Produto foi atualizado!") : BadRequest(result);

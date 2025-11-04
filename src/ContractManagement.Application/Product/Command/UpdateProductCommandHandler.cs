@@ -15,7 +15,7 @@ namespace ContractManagement.Application.Product.Command
                 return Result.Failure(new Error("ProductNotFound", "Produto não foi encontrado pelo código informado"));
             }
 
-            produto.AtualizarProduto(request.Name, request.UndMed, request.CodBarr, request.Description);
+            produto.AtualizarProduto(request.Name, request.UndMed, request.CodBarr, request.Description, request.Active);
             await _produtoRepository.UpdateProduto(produto, cancellationToken);
 
             return Result.Success(produto);

@@ -1,6 +1,4 @@
-﻿using ContractManagement.Domain.ValueObjects;
-
-namespace ContractManagement.Presentation.Model
+﻿namespace ContractManagement.Presentation.Model
 {
     public sealed record ProductRequest(
         string Nome,
@@ -19,7 +17,7 @@ namespace ContractManagement.Presentation.Model
     {
     }
 
-    public sealed record ProdutoUpdateRequest(string Name, string UndMed, string Cod, string CodBarr, string Description) { }
+    public sealed record ProdutoUpdateRequest(string Name, string UndMed, string Cod, string CodBarr, string Description, bool Active) { }
 
     public sealed record PromocaoResquet(decimal DescontoPercentual, DateTime Inicio, DateTime Fim);
 }

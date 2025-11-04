@@ -2,7 +2,7 @@
 
 namespace ContractManagement.Application.Product.Command
 {
-    public sealed record UpdateProductCommand(string Name, string Cod, string Description, string UndMed, string CodBarr) : ICommand
+    public sealed record UpdateProductCommand(string Name, string Cod, string Description, string UndMed, string CodBarr, bool Active) : ICommand
     {
     }
 }

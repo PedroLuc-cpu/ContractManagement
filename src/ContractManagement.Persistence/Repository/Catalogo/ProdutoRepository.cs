@@ -32,11 +32,13 @@ namespace ContractManagement.Persistence.Repository.Catalogo
 
         public async Task UpdateProduto(Produto produto, CancellationToken cancellationToken = default)
         {
-            await _dbSet.ExecuteUpdateAsync(set => set
+            await _dbSet.Where(p => p.Codigo == produto.Codigo).ExecuteUpdateAsync(set => set
                 .SetProperty(p => p.Nome, produto.Nome)
                 .SetProperty(p => p.UnidadeMedida, produto.UnidadeMedida)
                 .SetProperty(p => p.CodigoBarras, produto.CodigoBarras)
                 .SetProperty(p => p.Observacao, produto.Observacao)
+                .SetProperty(p => p.Ativo, produto.Ativo)
+                .SetProperty(p => p.DataAtualizao, produto.DataAtualizao)
                 ,cancellationToken);
             _context.SaveChanges();
         }
