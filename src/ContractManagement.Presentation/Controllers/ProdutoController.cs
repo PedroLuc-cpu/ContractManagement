@@ -1,11 +1,12 @@
 ﻿using ContractManagement.Application.Product.Command;
-using ContractManagement.Domain.DTO;
+using ContractManagement.Application.Product.Query;
 using ContractManagement.Domain.Entity.Catalogo;
 using ContractManagement.Domain.Interfaces;
 using ContractManagement.Domain.Interfaces.Repository;
+using ContractManagement.Domain.Shared;
+using ContractManagement.Presentation.Model;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 
 namespace ContractManagement.Presentation.Controllers
 {
@@ -18,20 +19,27 @@ namespace ContractManagement.Presentation.Controllers
         private readonly IRedisCacheRepository _redisCacheRepository = redisCacheRepository;
 
         [HttpPost]
-        [ProducesResponseType(typeof(Produto), 201)]
-        public async Task<IActionResult> CriarProduto([FromBody] ProdutoRequestDto produto)
+        [ProducesResponseType(typeof(ProductRequest), 201)]
+        public async Task<IActionResult> CriarProduto([FromBody] ProductRequest produtoRequest, CancellationToken cancellationToken)
         {
             LimparErrosProcessamento();
             try
             {
-                var existingProduto = await _produtoRepository.GetByCodigoAsync(produto.Codigo);
-                if (existingProduto is not null)
-                {
-                    return CustomResponse("Já existe um produto com esse código.");
-                }
+                var command = new CreateProductCommand(
+                    produtoRequest.Nome,
+                    produtoRequest.Observacao,
+                    produtoRequest.UnidadeMedida,
+                    produtoRequest.CodigoBarras,
+                    produtoRequest.Codigo,
+                    produtoRequest.PrecoVenda,
+                    produtoRequest.PrecoCusto,
+                    produtoRequest.EstoqueAtual,
+                    produtoRequest.EstoqueMinino,
+                    produtoRequest.EstoqueMaximo,
+                    produtoRequest.Ativo);
+                var result = await _sender.Send(command, cancellationToken);
 
-                await _produtoRepository.CreateProduto(produto);
-                return CreatedAtAction(nameof(ObterProdutoPorCodigo), new { codigo = produto.Codigo }, produto);
+                return result.IsSuccess ? Ok("Produto Cadastrado!") : BadRequest(result.Error);
             }
             catch (Exception ex)
             {
@@ -61,21 +69,16 @@ namespace ContractManagement.Presentation.Controllers
         }
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Produto>), 200)]
-        public async Task<IActionResult> ObterProdutos()
+        public async Task<IActionResult> ObterProdutos(CancellationToken cancellationToken)
         {
             LimparErrosProcessamento();
             try
             {
-                var produtos = _redisCacheRepository.GetData<IEnumerable<Produto>>("produtos");
+                var query = new GetAllProductQuery();
 
-                produtos = await _produtoRepository.GetAllAsync();
+                Result<IEnumerable<GetProductResponse>> response = await _sender.Send(query, cancellationToken);
 
-                if (produtos is null)
-                {
-                    return CustomResponse("Nenhum produto encontrado.");
-                }
-                _redisCacheRepository.SetData("produtos", produtos);
-                return Ok(produtos);
+                return response.IsSuccess ? Ok(response.Value) : NotFound(response.Error);
             }
             catch (Exception ex)
             {
@@ -84,20 +87,22 @@ namespace ContractManagement.Presentation.Controllers
             }
         }
         [HttpPut]
-        [ProducesResponseType(typeof(Produto), 200)]
-        public async Task<IActionResult> Update([FromBody] ProdutoRequestDto produto, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(ProdutoUpdateRequest), 200)]
+        public async Task<IActionResult> Update([FromBody] ProdutoUpdateRequest produtoUpdateReq, CancellationToken cancellationToken)
         {
             LimparErrosProcessamento();
             try
             {
-                var produtoExist = await _produtoRepository.GetByCodigoAsync(produto.Codigo, cancellationToken);
-                if (produtoExist is null)
-                {
-                    AdicionarErroProcessamento("Nâo foi encontrado nenhum produto com código informado");
-                    return CustomResponse();
-                }
-                await _produtoRepository.UpdateProduto(produto, cancellationToken);
-                return Ok(produtoExist);
+                var command = new UpdateProductCommand(
+                    produtoUpdateReq.Name,
+                    produtoUpdateReq.Cod,
+                    produtoUpdateReq.Description,
+                    produtoUpdateReq.UndMed,
+                    produtoUpdateReq.CodBarr);
+
+                var result = await _sender.Send(command, cancellationToken);
+                return result.IsSuccess ? Ok("Produto foi atualizado!") : BadRequest(result);
+                
             }
             catch (Exception ex)
             {
@@ -117,7 +122,6 @@ namespace ContractManagement.Presentation.Controllers
             var result = await _sender.Send(command, cancellationToken);
             return result.IsSuccess ? Ok(command) : BadRequest(result.Error);
         }
-
-
     }
+
 }

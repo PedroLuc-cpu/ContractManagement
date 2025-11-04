@@ -71,8 +71,8 @@ namespace ContractManagement.Domain.Entity.Catalogo
             string codigoBarras,
             string observacao,
             string codigo,
-            Money precoVenda,
-            Money precoCusto,
+            decimal precoVenda,
+            decimal precoCusto,
             int estoqueAtual,
             int estoqueMinino,
             int estoqueMaximo,
@@ -88,11 +88,24 @@ namespace ContractManagement.Domain.Entity.Catalogo
             Guard.AgaintNull(estoqueMinino, nameof(precoCusto));
             Guard.AgaintNull(unidadeMedida, nameof(precoCusto));
             Guard.AgaintNull(observacao, nameof(precoCusto));
-            Guard.Againts<DomainException>(precoVenda.Value <= 0, "O preço de venda não pode zero ou negativo");
-            Guard.Againts<DomainException>(precoCusto.Value < 0, "O preço de custo não pode ser negativo");          
-            Guard.Againts<DomainException>(precoCusto.Value > precoVenda.Value, "O preço de custo não pode ser maior que o preço de venda");
+            Guard.Againts<DomainException>(precoVenda <= 0, "O preço de venda não pode zero ou negativo");
+            Guard.Againts<DomainException>(precoCusto < 0, "O preço de custo não pode ser negativo");          
+            Guard.Againts<DomainException>(precoCusto > precoVenda, "O preço de custo não pode ser maior que o preço de venda");
 
-            var produto = new Produto(nome, unidadeMedida, codigoBarras, observacao, codigo, precoVenda, precoCusto, estoqueAtual, estoqueMinino, estoqueMaximo, ativo);
+            var produto = new Produto(
+                nome,
+                unidadeMedida,
+                codigoBarras,
+                observacao,
+                codigo,
+                Money.Create(precoVenda).Value,
+                Money.Create(precoCusto).Value,
+                estoqueAtual,
+                estoqueMinino,
+                estoqueMaximo,
+                ativo
+            );
+
             return produto;
          
         }

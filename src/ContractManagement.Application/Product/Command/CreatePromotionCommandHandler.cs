@@ -1,5 +1,4 @@
 ﻿using ContractManagement.Application.Abstractions.Messaging;
-using ContractManagement.Domain.Entity;
 using ContractManagement.Domain.Interfaces.Repository;
 using ContractManagement.Domain.Shared;
 using ContractManagement.Domain.ValueObjects;

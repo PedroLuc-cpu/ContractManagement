@@ -1,6 +1,4 @@
-﻿using ContractManagement.Domain.DTO;
-using ContractManagement.Domain.Entity;
-using ContractManagement.Domain.Entity.Catalogo;
+﻿using ContractManagement.Domain.Entity.Catalogo;
 using ContractManagement.Domain.Interfaces.Repository;
 using ContractManagement.Domain.ValueObjects;
 using ContractManagement.Infrastructure.Persistence;
@@ -18,20 +16,8 @@ namespace ContractManagement.Persistence.Repository.Catalogo
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task CreateProduto(ProdutoRequestDto produtoRequest, CancellationToken cancellationToken = default)
+        public async Task CreateProduto(Produto produto, CancellationToken cancellationToken = default)
         {
-            var produto = Produto.Create(
-                produtoRequest.Nome,
-                produtoRequest.UnidadeMedida,
-                produtoRequest.CodigoBarras,
-                produtoRequest.Observacao,
-                produtoRequest.Codigo,
-                Money.Create(produtoRequest.PrecoVenda).Value,
-                Money.Create(produtoRequest.PrecoCusto).Value,
-                produtoRequest.EstoqueAtual,
-                produtoRequest.EstoqueMinino,
-                produtoRequest.EstoqueMaximo,
-                produtoRequest.Ativo);
             await _dbSet.AddAsync(produto, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -44,19 +30,15 @@ namespace ContractManagement.Persistence.Repository.Catalogo
             return produto;
         }
 
-        public async Task UpdateProduto(ProdutoRequestDto produtoRequest, CancellationToken cancellationToken = default)
+        public async Task UpdateProduto(Produto produto, CancellationToken cancellationToken = default)
         {
-            var produto = await _dbSet.Where(p => p.Codigo == produtoRequest.Codigo || p.CodigoBarras == p.CodigoBarras || p.Nome == produtoRequest.Nome).FirstOrDefaultAsync(cancellationToken);
-            produto.AtualizarProduto(produtoRequest.Nome, produtoRequest.UnidadeMedida, produtoRequest.CodigoBarras, produtoRequest.Observacao);
-
             await _dbSet.ExecuteUpdateAsync(set => set
                 .SetProperty(p => p.Nome, produto.Nome)
                 .SetProperty(p => p.UnidadeMedida, produto.UnidadeMedida)
                 .SetProperty(p => p.CodigoBarras, produto.CodigoBarras)
                 .SetProperty(p => p.Observacao, produto.Observacao)
-                );
+                ,cancellationToken);
             _context.SaveChanges();
-
         }
     }
 }
