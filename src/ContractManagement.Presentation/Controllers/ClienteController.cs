@@ -1,18 +1,22 @@
-﻿using ContractManagement.Domain.DTO;
+﻿using ContractManagement.Application.Client.Command;
 using ContractManagement.Domain.Entity.Clientes;
 using ContractManagement.Domain.Interfaces.Repository.Clientes;
+using ContractManagement.Presentation.Model;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace ContractManagement.Presentation.Controllers
 {
     [Route("cliente")]
     [Produces("application/json")]
-    public sealed class ClienteController(IClienteRepository clienteRepository) : MainController
+    public sealed class ClienteController(IClienteRepository clienteRepository, ISender sender) : MainController
     {
         private readonly IClienteRepository _clienteRepository = clienteRepository;
+        private readonly ISender _sender = sender;
 
         [HttpGet("clientes/{pageNumber:int}/{pageSize:int}")]
-        [ProducesResponseType(typeof(IEnumerable<Cliente>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<ClienteResponse>), 200)]
         public async Task<IActionResult> ObterClientes(int pageNumber, int pageSize)
         {
             LimparErrosProcessamento();
@@ -32,7 +36,7 @@ namespace ContractManagement.Presentation.Controllers
             }
         }
         [HttpGet("{id:guid}")]
-        [ProducesResponseType(typeof(Cliente), 200)]
+        [ProducesResponseType(typeof(ClienteResponse), 200)]
         public async Task<IActionResult> ObterClientePorId(Guid id)
         {
             LimparErrosProcessamento();
@@ -52,7 +56,7 @@ namespace ContractManagement.Presentation.Controllers
             }
         }
         [HttpGet("email/{email}")]
-        [ProducesResponseType(typeof(Cliente), 200)]
+        [ProducesResponseType(typeof(ClienteResponse), 200)]
         public async Task<IActionResult> ObterClientePorNome(string email)
         {
             LimparErrosProcessamento();
@@ -74,20 +78,24 @@ namespace ContractManagement.Presentation.Controllers
         }
         [HttpPost]
         [ProducesResponseType(typeof(Cliente), 201)]
-        public async Task<IActionResult> CriarCliente([FromBody] ClienteRequestDto cliente, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CriarCliente([FromBody] ClienteRequest cliente, CancellationToken cancellationToken)
         {
             LimparErrosProcessamento();
             try
             {
-                var existingClient = await _clienteRepository.GetByEmailAsync(cliente.Email, cancellationToken);
-                if (existingClient is not null)
-                {
-                    AdicionarErroProcessamento("Já existe um cliente cadastrado com esse email.");
-                    return CustomResponse();
-                }
+                var command = new CreateClientCommand(
+                    cliente.Nome,
+                    cliente.Sobrenome,
+                    cliente.Email,
+                    cliente.Endereco.Rua,
+                    cliente.Endereco.Numero,
+                    cliente.Endereco.Cidade,
+                    cliente.Endereco.Estado,
+                    cliente.Endereco.Cep);
 
-                await _clienteRepository.CreateClientAsync(cliente.Nome, cliente.Sobrenome, cliente.Email, cliente.Endereco, cancellationToken);
-                return Ok("Cliente foi salvo com sucesso.");
+                var result = await _sender.Send(command, cancellationToken);
+
+                return result.IsSuccess ? Ok(result) : BadRequest(result.Error);
             }
             catch (Exception ex)
             {
@@ -96,20 +104,25 @@ namespace ContractManagement.Presentation.Controllers
             }
         }
         [HttpPut]
-        [ProducesResponseType(typeof(Cliente), 200)]
-        public async Task<IActionResult> AtualizarCliente([FromBody] ClienteUpdateRequestDto cliente, CancellationToken cancellationToken = default)
+        [ProducesResponseType(typeof(ClienteUpdateRequest), 200)]
+        public async Task<IActionResult> AtualizarCliente([FromBody] ClienteUpdateRequest clienteReq, CancellationToken cancellationToken)
         {
             LimparErrosProcessamento();
             try
             {
-                var existingClient = await _clienteRepository.GetByEmailAsync(cliente.Email.Value, cancellationToken);
-                if (existingClient is null)
-                {
-                    AdicionarErroProcessamento("Cliente não encontrado.");
-                    return CustomResponse();
-                }
-                await _clienteRepository.UpdateClientAsync(cliente, cancellationToken);
-                return Ok("Cliente atualizado com sucesso.");
+                var commmand = new UpdateClientCommand(
+                    clienteReq.Nome,
+                    clienteReq.Sobrenome,
+                    clienteReq.Email,
+                    clienteReq.Endereco.Rua,
+                    clienteReq.Endereco.Numero,
+                    clienteReq.Endereco.Cidade,
+                    clienteReq.Endereco.Cidade,
+                    clienteReq.Endereco.Cep);
+
+                var result = await _sender.Send(commmand, cancellationToken);
+                return result.IsSuccess ? Ok("Cliente atualizado com sucesso") : BadRequest(result);
+
             }
             catch (Exception ex)
             {

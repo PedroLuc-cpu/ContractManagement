@@ -50,7 +50,13 @@ builder.Services.Scan(
     .AsImplementedInterfaces()
     .WithScopedLifetime());
 
-builder.Services.AddMediatR(m => m.RegisterServicesFromAssembly(ContractManagement.Application.AssemblyReference.Assembly));
+builder.Services.AddMediatR(m =>
+{
+    var MediatRLicence = builder.Configuration.GetConnectionString("MediarRLicence");
+
+    m.LicenseKey = MediatRLicence;
+    m.RegisterServicesFromAssembly(ContractManagement.Application.AssemblyReference.Assembly);
+});
 
 builder.Services
     .AddControllers()

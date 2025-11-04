@@ -1,12 +1,11 @@
 ﻿using ContractManagement.Application.Abstractions.Messaging;
-using ContractManagement.Application.Members.CreateMember;
 using ContractManagement.Domain.Entity;
 using ContractManagement.Domain.Interfaces;
 using ContractManagement.Domain.Shared;
 using ContractManagement.Domain.ValueObjects;
 
 
-namespace Gatherly.Application.Members.Commands.CreateMember;
+namespace ContractManagement.Application.Members.CreateMember;
 
 internal sealed class CreateMemberCommandHandler : ICommandHandler<CreateMemberCommand>
 {

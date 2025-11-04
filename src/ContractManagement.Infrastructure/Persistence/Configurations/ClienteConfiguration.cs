@@ -10,8 +10,6 @@ namespace ContractManagement.Infrastructure.Persistence.Configurations
         {
             builder.ToTable("clientes");
             builder.HasKey(c => c.Id);
-            builder.Property(c => c.DataCriacao).HasColumnName("dt_created").IsRequired();
-            builder.Property(c => c.DataAtualizao).HasColumnName("dt_update");
             builder.OwnsOne(c => c.FirstName, nome =>
             {
                 nome.Property(n => n.Value).HasColumnName("nome").HasMaxLength(50).IsRequired();
@@ -27,14 +25,14 @@ namespace ContractManagement.Infrastructure.Persistence.Configurations
             });
             builder.OwnsOne(c => c.Endereco, endereco =>
             {
-                endereco.ToTable("enderecos");
                 endereco.Property(e => e.Rua).HasColumnName("rua").HasMaxLength(150).IsRequired();
                 endereco.Property(e => e.Numero).HasColumnName("numero").HasMaxLength(4);
                 endereco.Property(e => e.Cidade).HasColumnName("cidade").HasMaxLength(150).IsRequired();
                 endereco.Property(e => e.Estado).HasColumnName("estado").HasMaxLength(15).IsRequired();
                 endereco.Property(e => e.Cep).HasColumnName("cep").HasMaxLength(8).IsRequired();
             });
-
+            builder.Property(c => c.DataCriacao).HasColumnName("dt_created").IsRequired();
+            builder.Property(c => c.DataAtualizao).HasColumnName("dt_update");
         }
     }
 }

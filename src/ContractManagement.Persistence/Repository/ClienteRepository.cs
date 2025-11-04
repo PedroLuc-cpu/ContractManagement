@@ -1,7 +1,5 @@
-﻿using ContractManagement.Domain.DTO;
-using ContractManagement.Domain.Entity.Clientes;
+﻿using ContractManagement.Domain.Entity.Clientes;
 using ContractManagement.Domain.Interfaces.Repository.Clientes;
-using ContractManagement.Domain.ValueObjects;
 using ContractManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,24 +7,8 @@ namespace ContractManagement.Persistence.Repository
 {
     public class ClienteRepository(ContractManagementContext context) : BaseRepository<Cliente>(context), IClienteRepository
     {
-        public async Task CreateClientAsync(string nome, string sobrenone, string email, Endereco endereco, CancellationToken cancellationToken = default)
+        public async Task CreateClientAsync(Cliente cliente, CancellationToken cancellationToken = default)
         {
-            var nomeResult = FirstName.Create(nome);
-            if (nomeResult.IsFailure)
-            {
-                throw new ArgumentException(nomeResult.Error);
-            }
-            var sobrenomeResult = LastName.Create(sobrenone);
-            if (sobrenomeResult.IsFailure)
-            {
-                throw new ArgumentException(sobrenomeResult.Error);
-            }
-            var emailResult = Email.Create(email);
-            if (emailResult.IsFailure) {
-                throw new ArgumentException(emailResult.Error);
-            }
-
-            var cliente = Cliente.Create(nomeResult.Value, sobrenomeResult.Value, emailResult.Value, endereco);
             await _dbSet.AddAsync(cliente, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -50,12 +32,19 @@ namespace ContractManagement.Persistence.Repository
             return cliente;            
         }
 
-        public async Task UpdateClientAsync(ClienteUpdateRequestDto cliente, CancellationToken cancellationToken = default)
+        public async Task UpdateClientAsync(Cliente cliente, CancellationToken cancellationToken = default)
         {
-            var cs = Cliente.AtualizarCliente(cliente.FirstName, cliente.LastName, cliente.Email, cliente.Endereco);
 
             await _dbSet.ExecuteUpdateAsync(set => set
-                .SetProperty(c => c, cs.Value), cancellationToken);
+                .SetProperty(c => c.FirstName.Value, cliente.FirstName.Value)
+                .SetProperty(c => c.LastName.Value, cliente.LastName.Value)
+                .SetProperty(c => c.Email.Value, cliente.Email.Value)
+                .SetProperty(c => c.Endereco.Rua, cliente.Endereco.Rua)
+                .SetProperty(c => c.Endereco.Numero, cliente.Endereco.Rua)
+                .SetProperty(c => c.Endereco.Cidade, cliente.Endereco.Cidade)
+                .SetProperty(c => c.Endereco.Estado, cliente.Endereco.Estado)
+                .SetProperty(c => c.Endereco.Cep, cliente.Endereco.Cep)
+                , cancellationToken);
         }
     }
 }

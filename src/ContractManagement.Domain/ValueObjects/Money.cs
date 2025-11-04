@@ -1,5 +1,4 @@
-﻿using ContractManagement.Domain.Common.Exceptions;
-using ContractManagement.Domain.Erros;
+﻿using ContractManagement.Domain.Erros;
 using ContractManagement.Domain.Primitives;
 using ContractManagement.Domain.Shared;
 
