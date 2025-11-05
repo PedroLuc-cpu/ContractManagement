@@ -1,0 +1,46 @@
+﻿@page "/produtos"
+@using ContractManagement.UI.Blazor.DTOs
+@inject ProdutoServices ProdutoServices
+
+<MudTable Items="@produtos" Hover="true" Bordered="true" Striped="true" Breakpoint="Breakpoint.Sm" >
+    <HeaderContent>
+        <MudTh>Nome</MudTh>
+        <MudTh>Ativo</MudTh>
+        <MudTh>Descrição</MudTh>
+        <MudTh>Código de Barra</MudTh>
+        <MudTh>Código</MudTh>
+        <MudTh>Unidade Medida</MudTh>
+        <MudTh>Preço de Venda</MudTh>
+        <MudTh>Preço de Custo</MudTh>
+        <MudTh>Estoque Atual</MudTh>
+        <MudTh>Estoque Mínimo</MudTh>
+        <MudTh>Estoque Maximo</MudTh>
+
+        
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Name</MudTd>
+        <MudTd>@context.Active</MudTd>
+        <MudTd>@context.Description</MudTd>
+        <MudTd>@context.CodBarr</MudTd>
+        <MudTd>@context.Cod</MudTd>
+        <MudTd>@context.UnidMed</MudTd>
+        <MudTd>@context.SalePrice</MudTd>
+        <MudTd>@context.BuyPrice</MudTd>
+        <MudTd>@context.CurrentStock</MudTd>
+        <MudTd>@context.MinimalStock</MudTd>
+        <MudTd>@context.MaxStock</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private List<ProdutoDto> produtos = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        produtos = await ProdutoServices.GetAllProdutos();
+    }
+}
