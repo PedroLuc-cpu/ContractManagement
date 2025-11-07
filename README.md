@@ -15,6 +15,9 @@
 
 ---
 
+<img width="583" height="684" alt="DDD Programation" src="https://github.com/user-attachments/assets/a5ee64ed-2671-46cf-a7a9-db0b8627db85" />
+
+
 ## 🏗️ Estrutura do projeto
 
 ```bash
