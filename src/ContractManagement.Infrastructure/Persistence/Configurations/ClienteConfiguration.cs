@@ -25,6 +25,7 @@ namespace ContractManagement.Infrastructure.Persistence.Configurations
             });
             builder.OwnsOne(c => c.Endereco, endereco =>
             {
+                endereco.ToTable("endereco");
                 endereco.Property(e => e.Rua).HasColumnName("rua").HasMaxLength(150).IsRequired();
                 endereco.Property(e => e.Numero).HasColumnName("numero").HasMaxLength(4);
                 endereco.Property(e => e.Cidade).HasColumnName("cidade").HasMaxLength(150).IsRequired();

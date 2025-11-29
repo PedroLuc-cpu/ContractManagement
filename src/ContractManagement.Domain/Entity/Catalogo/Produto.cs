@@ -8,6 +8,7 @@ namespace ContractManagement.Domain.Entity.Catalogo
     public class Produto : AggregateRoot
     {
         public string Nome { get; private set; }
+        public byte[]? Imagem { get; private set; }
         public bool Ativo { get; private set; }
         public string Observacao { get; private set; }
         public string CodigoBarras { get; private set; }
@@ -22,7 +23,7 @@ namespace ContractManagement.Domain.Entity.Catalogo
         public HorarioDisponibilidade? Disponibilidade { get; private set; }
 
         protected Produto(): base(id: Guid.Empty, dataCriacao: DateTime.UtcNow) { }
-        private Produto(string nome,
+        private Produto(string nome, byte[]? imagem,
             string unidadeMedida,
             string codigoBarras,
             string observacao,
@@ -36,6 +37,7 @@ namespace ContractManagement.Domain.Entity.Catalogo
             ): base(Guid.NewGuid(), dataCriacao: DateTime.UtcNow)
         {
             Nome = nome;
+            Imagem = imagem;
             Observacao = observacao;
             Ativo = ativo;
             CodigoBarras = codigoBarras;
@@ -67,6 +69,7 @@ namespace ContractManagement.Domain.Entity.Catalogo
 
         public static Produto Create(
             string nome,
+            byte[]? imagem,
             string unidadeMedida,
             string codigoBarras,
             string observacao,
@@ -94,6 +97,7 @@ namespace ContractManagement.Domain.Entity.Catalogo
 
             var produto = new Produto(
                 nome,
+                imagem,
                 unidadeMedida,
                 codigoBarras,
                 observacao,
@@ -116,9 +120,10 @@ namespace ContractManagement.Domain.Entity.Catalogo
             Disponibilidade = disponibilidade;
         }
 
-        public void AtualizarProduto(string nome, string unidadeMedida, string codigoBarras, string observacao, bool ativo)
+        public void AtualizarProduto(string nome, byte[]? imagem, string unidadeMedida, string codigoBarras, string observacao, bool ativo)
         {
             Nome = nome;
+            Imagem = imagem;
             UnidadeMedida = unidadeMedida;
             CodigoBarras = codigoBarras;
             Observacao = observacao;

@@ -1,28 +1,34 @@
 ﻿@page "/"
+@using ContractManagement.UI.Blazor.DTOs
+@inject ProdutoServices ProdutoServices
+
 <MudGrid>
-    <MudItem xs="12">
+    <MudItem xs="6">
         <MudCard>
             <MudCardContent>
-                <MudText>Pedidos:</MudText>
+                <MudText>Produdos: @produtos.Count().ToString()</MudText>
+                <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@data" InputLabels="@labels" />
             </MudCardContent>
         </MudCard>
     </MudItem>
     <MudItem xs="6">
         <MudCard>
             <MudCardContent>
-                <MudText>Pedidos:</MudText>
-            </MudCardContent>
-        </MudCard>
-    </MudItem>
-    <MudItem xs="6">
-        <MudCard>
-            <MudCardContent>
-                <MudText>Pedidos:</MudText>
+                <MudText>Clientes: @data.Sum().ToString()</MudText>
+                <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@data" InputLabels="@labels" />
             </MudCardContent>
         </MudCard>
     </MudItem>
 </MudGrid>
 
 @code {
+    private List<ProdutoDto> produtos = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        produtos = await ProdutoServices.GetAllProdutos();
+    }
+    public double[] data = { 25, 77, 22 };
+    public string[] labels = { "Hoje", "Ontem", "Semana Passada" };
 
 }

@@ -14,7 +14,7 @@ namespace ContractManagement.Infrastructure.Persistence.Configurations
                 .HasColumnName("nome")
                 .HasMaxLength(200)
                 .IsRequired();
-
+            builder.Property(p => p.Imagem).HasColumnName("image");
             builder.Property(p => p.Observacao)
                 .HasColumnName("obersavao")
                 .HasMaxLength(200)

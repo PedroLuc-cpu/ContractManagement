@@ -2,15 +2,17 @@
 using ContractManagement.Domain.Entity.Pedidos;
 using ContractManagement.Domain.Interfaces.Repository.Pedidos;
 using ContractManagement.Domain.ValueObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ContractManagement.Presentation.Controllers.PedidoControllers
+namespace ContractManagement.Presentation.Controllers
 {
     /// <summary>
     /// rota de pedidos
     /// </summary>  
-    [Route("pedido")]
+    [Route("order")]
     [Produces("application/json")]
+    [Authorize]
     public sealed class PedidoController(IPedidoRepository pedidoRepository, IPedidoRepository pedidoItemRepository ) : MainController
     {
         private readonly IPedidoRepository _pedidoRepository = pedidoRepository;

@@ -3,6 +3,7 @@
     public sealed record ProdutoDto(
         Guid Id,
         string Name,
+        byte[]? Imagem,
         bool Active,
         string Description,
         string CodBarr,

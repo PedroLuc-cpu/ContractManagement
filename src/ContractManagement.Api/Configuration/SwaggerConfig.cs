@@ -24,32 +24,33 @@ namespace ContractManagement.Api.Configuration
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
+                if (File.Exists(xmlPath))
+                    c.IncludeXmlComments(xmlPath);
 
-                //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                //{
-                //    Description = "Insira o token JWT desta maneira: Bearer {Seu token}",
-                //    Name = "Authorization",
-                //    Scheme = "Bearer",
-                //    In = ParameterLocation.Header,
-                //    Type = SecuritySchemeType.ApiKey
-                //});
+            //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            //{
+            //    Description = "Insira o token JWT desta maneira: Bearer {Seu token}",
+            //        Name = "Authorization",
+            //        Scheme = "Bearer",
+            //        In = ParameterLocation.Header,
+            //        Type = SecuritySchemeType.ApiKey
+            //    });
 
-                //c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                //{
-                //    {
-                //        new OpenApiSecurityScheme
-                //        {
-                //            Reference = new OpenApiReference
-                //            {
-                //                Type = ReferenceType.SecurityScheme,
-                //                Id = "Bearer"
-                //            }
-                //        },
-                //        new string[]{}
-                //    }
-                //});
-            });
+            //c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            //    {
+            //        {
+            //            new OpenApiSecurityScheme
+            //            {
+            //                Reference = new OpenApiReference
+            //                {
+            //                    Type = ReferenceType.SecurityScheme,
+            //                    Id = "Bearer"
+            //                }
+            //            },
+            //            new string[]{}
+            //        }
+            //    });
+        });
 
             return services;
         }
