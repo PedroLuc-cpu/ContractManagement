@@ -3,6 +3,7 @@
     public sealed record GetProductResponse(
         Guid Id,
         string Name,
+        byte[]? Imagem,
         bool Active,
         string Description,
         string CodBarr,

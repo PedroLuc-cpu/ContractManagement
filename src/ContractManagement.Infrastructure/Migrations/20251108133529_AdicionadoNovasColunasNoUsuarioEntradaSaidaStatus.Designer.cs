@@ -3,6 +3,7 @@ using System;
 using ContractManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ContractManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ContractManagementContext))]
-    partial class ContractManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20251108133529_AdicionadoNovasColunasNoUsuarioEntradaSaidaStatus")]
+    partial class AdicionadoNovasColunasNoUsuarioEntradaSaidaStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,7 +161,7 @@ namespace ContractManagement.Infrastructure.Migrations
 
                     b.Property<string>("DescricaoStatus")
                         .IsRequired()
-                        .HasColumnType("varchar");
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -168,9 +171,7 @@ namespace ContractManagement.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("Entrada")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValue(new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -196,9 +197,7 @@ namespace ContractManagement.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("Saida")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasDefaultValue(new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");

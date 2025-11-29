@@ -3,17 +3,20 @@ using ContractManagement.Domain.Entity.Clientes;
 using ContractManagement.Domain.Interfaces.Repository.Clientes;
 using ContractManagement.Presentation.Model;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace ContractManagement.Presentation.Controllers
 {
-    [Route("cliente")]
+    [Route("client")]
     [Produces("application/json")]
+    [Authorize]
     public sealed class ClienteController(IClienteRepository clienteRepository, ISender sender) : MainController
     {
         private readonly IClienteRepository _clienteRepository = clienteRepository;
         private readonly ISender _sender = sender;
+
 
         [HttpGet("clientes/{pageNumber:int}/{pageSize:int}")]
         [ProducesResponseType(typeof(IEnumerable<ClienteResponse>), 200)]

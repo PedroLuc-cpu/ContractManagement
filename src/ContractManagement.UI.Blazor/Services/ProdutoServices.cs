@@ -12,5 +12,11 @@ namespace ContractManagement.UI.Blazor.Services
             var response = await _httpClient.GetFromJsonAsync<List<ProdutoDto>>("v1/api/produto");
             return response ?? [];
         }
+        public async Task<ProdutoDto?> GetProdutoPorCodigo(int codigo)
+        {
+            var response = await _httpClient.GetFromJsonAsync<ProdutoDto>($"v1/api/produto/{codigo}");
+            return response;
+        }
+
     }
 }

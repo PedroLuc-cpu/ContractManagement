@@ -1,6 +1,6 @@
 ﻿namespace ContractManagement.Application.Members.Login
 {
-    public record LoginRequest(string Email) 
+    public record LoginRequestCommand(string Email) 
     {
     }
 }

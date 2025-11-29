@@ -1,13 +1,18 @@
 using ContractManagement.Api.Configuration;
 using ContractManagement.Api.Extensions;
 using ContractManagement.Api.OptionSetup;
+using ContractManagement.Infrastructure.Hubs;
+using ContractManagement.Infrastructure.Identity;
 using ContractManagement.Infrastructure.Options;
 using ContractManagement.Infrastructure.Persistence;
 using Marten;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSignalR();
 
 builder.Configuration.SetDefaultConfiguration(builder.Environment);
 
@@ -27,6 +32,34 @@ builder.Services.AddDbContext<ContractManagementContext>((serviceProvider, dbCon
     dbContextOptionsBuilder.EnableDetailedErrors(false);
     dbContextOptionsBuilder.EnableSensitiveDataLogging(true);
 });
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = IdentityConstants.BearerScheme;
+    options.DefaultChallengeScheme = IdentityConstants.BearerScheme;
+})
+    .AddBearerToken(IdentityConstants.BearerScheme).AddCookie(IdentityConstants.ApplicationScheme, options =>
+    {
+        options.Cookie.Name = "cm-auth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.None;
+        options.Events = new CookieAuthenticationEvents
+        {
+            OnRedirectToLogin = ctx =>
+            {
+                ctx.Response.StatusCode = 401;
+                return Task.CompletedTask;
+            }
+        };
+    });
+
+builder.Services.AddIdentityCore<ApplicationUser>()
+    .AddEntityFrameworkStores<ContractManagementContext>()
+    .AddSignInManager<SignInManager<ApplicationUser>>()
+    .AddApiEndpoints();
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = builder.Configuration.GetConnectionString("Cache")
@@ -62,9 +95,6 @@ builder.Services
     .AddControllers()
     .AddApplicationPart(ContractManagement.Presentation.AssemblyReference.Assembly);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer();
-
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
 builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
@@ -78,22 +108,30 @@ if (builder.Environment.EnvironmentName != "Testing")
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.ApplyMigration();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.ApplyMigration();
+//}
+
+app.MapHub<ContractManagementHub>("/contractmanagementHub");
 
 app.UseSwaggerConfiguration(builder.Environment);
 
 app.UseCors("Total");
 
-app.UseHttpsRedirection();
+if (builder.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
 
+}
 app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.MapIdentityApi<ApplicationUser>();
+
 app.MapControllers();
+
 
 app.Run();
 

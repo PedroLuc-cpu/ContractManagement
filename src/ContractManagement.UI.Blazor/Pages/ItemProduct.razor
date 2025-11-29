@@ -1,0 +1,91 @@
+﻿@page "/produtos/{Codigo:int}"
+@using ContractManagement.UI.Blazor.DTOs
+@inject ProdutoServices ProdutoServices
+@inject NavigationManager Nav
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-6">
+    @if (produto is null)
+    {
+        <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" Class="d-flex mx-auto mt-8" />
+    }
+    else
+    {
+        <MudPaper Elevation="3" Class="p-4 rounded-lg">
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudCard Class="overflow-hidden">
+                        <MudCardMedia Image="@GetImagem(produto.Imagem)" Height="400" Class="object-cover" />
+                    </MudCard>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudStack Spacing="2">
+                        <MudText Typo="Typo.h4" Class="font-semibold">@produto.Name</MudText>
+                        <MudText Typo="Typo.subtitle1" Color="Color.Secondary">
+                            Código: <b>@produto.Cod</b>
+                        </MudText>
+
+                        <MudDivider Class="my-2" />
+
+                        <MudText Typo="Typo.h5" Color="Color.Primary" Class="font-bold">
+                            R$ @produto.SalePrice.ToString("N2")
+                        </MudText>
+
+                        <MudText Typo="Typo.body1" Class="mt-3">@produto.Description</MudText>
+
+                        <MudChip T="string" Color="@(produto.Active ? Color.Success : Color.Error)" Variant="Variant.Outlined">
+                            @(produto.Active ? "Disponível em estoque" : "Indisponível")
+                        </MudChip>
+
+                        <MudDivider Class="my-2" />
+
+                        <MudStack Row="true" Spacing="2">
+                            <MudButton
+                                Color="Color.Success"
+                                Variant="Variant.Filled"
+                                StartIcon="@Icons.Material.Filled.AddShoppingCart"
+                            >
+                                Adicionar ao Carrinho
+                            </MudButton>
+
+                            <MudButton
+                                Color="Color.Secondary"
+                                Variant="Variant.Outlined"
+                                StartIcon="@Icons.Material.Filled.ArrowBack"
+                                OnClick="Voltar"
+                            >
+                                Voltar
+                            </MudButton>
+                        </MudStack>
+                    </MudStack>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    }
+</MudContainer>
+
+@code {
+    [Parameter]
+    public int Codigo { get; set; }
+
+    private ProdutoDto? produto;
+
+    protected override async Task OnInitializedAsync()
+    {
+        produto = await ProdutoServices.GetProdutoPorCodigo(Codigo);
+    }
+
+    private void Voltar()
+    {
+        Nav.NavigateTo("/produtos");
+    }
+
+    private string GetImagem(byte[]? imagem)
+    {
+        if (imagem is { Length: > 0 })
+            return $"data:image/jpeg;base64,{Convert.ToBase64String(imagem)}";
+
+        // Placeholder elegante
+        return "https://via.placeholder.com/600x400?text=Sem+Imagem";
+    }
+}

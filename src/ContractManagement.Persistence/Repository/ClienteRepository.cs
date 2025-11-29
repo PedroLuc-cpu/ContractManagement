@@ -39,7 +39,7 @@ namespace ContractManagement.Persistence.Repository
                 .SetProperty(c => c.FirstName.Value, cliente.FirstName.Value)
                 .SetProperty(c => c.LastName.Value, cliente.LastName.Value)
                 .SetProperty(c => c.Email.Value, cliente.Email.Value)
-                .SetProperty(c => c.Endereco.Rua, cliente.Endereco.Rua)
+                .SetProperty(c => c.Endereco.Rua, cliente.Endereco.Numero)
                 .SetProperty(c => c.Endereco.Numero, cliente.Endereco.Rua)
                 .SetProperty(c => c.Endereco.Cidade, cliente.Endereco.Cidade)
                 .SetProperty(c => c.Endereco.Estado, cliente.Endereco.Estado)

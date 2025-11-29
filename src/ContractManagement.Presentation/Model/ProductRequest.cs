@@ -1,7 +1,10 @@
-﻿namespace ContractManagement.Presentation.Model
+﻿using Microsoft.AspNetCore.Http;
+
+namespace ContractManagement.Presentation.Model
 {
     public sealed record ProductRequest(
         string Nome,
+        IFormFile? Imagem,
         string UnidadeMedida,
         string CodigoBarras,
         string Observacao,
@@ -17,7 +20,7 @@
     {
     }
 
-    public sealed record ProdutoUpdateRequest(string Name, string UndMed, string Cod, string CodBarr, string Description, bool Active) { }
+    public sealed record ProdutoUpdateRequest(string Name, byte[]? Imagem, string UndMed, string Cod, string CodBarr, string Description, bool Active) { }
 
     public sealed record PromocaoResquet(decimal DescontoPercentual, DateTime Inicio, DateTime Fim);
 }

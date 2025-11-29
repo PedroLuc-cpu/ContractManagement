@@ -23,6 +23,7 @@ namespace ContractManagement.Application.Product.Query
             var response = products.Select(p => new GetProductResponse(
                 p.Id,
                 p.Nome,
+                p.Imagem,
                 p.Ativo,
                 p.Observacao,
                 p.CodigoBarras,
