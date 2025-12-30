@@ -1,14 +1,20 @@
 services:
-  contractmanagement.api:
+  contractmanagement-api:
     image: ${DOCKER_REGISTRY-}contractmanagementapi
-    container_name: contractmanagementapi.api
     build:
       context: .
       dockerfile: src/ContractManagement.Api/Dockerfile
-    ports:
-        - "5000:5000"
-        - "5001:5001"
-  contractmanagement.database:
+    expose:
+      - "5000"
+    depends_on:
+      contractmanagement-database:
+        condition: service_healthy
+      contractmanagement-cache:
+        condition: service_started
+    networks:
+      - contract-net
+
+  contractmanagement-database:
     image: postgres:latest
     container_name: contractmanagement-database
     restart: always
@@ -18,16 +24,39 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: db_contractmanagement
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - contract-net
     volumes:
       - contractmanagement_data:/var/lib/postgresql/data
     
-  contractmanagement.cache:
+  contractmanagement-cache:
     image: redis:latest
     restart: always
     ports: 
-        - "6379:6379"
+      - "6379:6379"
+    networks:
+      - contract-net
+
+  web:
+    image: nginx:latest
+    networks:
+      - contract-net
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    depends_on:
+      - contractmanagement-api
+    command: [nginx-debug, '-g', 'daemon off;']
+
+networks:
+  contract-net:
+    driver: bridge
+
 volumes:
   contractmanagement_data:
-        
-       
-    

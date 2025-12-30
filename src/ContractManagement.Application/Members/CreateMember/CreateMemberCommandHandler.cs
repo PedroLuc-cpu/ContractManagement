@@ -7,18 +7,13 @@ using ContractManagement.Domain.ValueObjects;
 
 namespace ContractManagement.Application.Members.CreateMember;
 
-internal sealed class CreateMemberCommandHandler : ICommandHandler<CreateMemberCommand>
+internal sealed class CreateMemberCommandHandler(
+    IMemberRepository memberRepository,
+    IUnitOfWork unitOfWork) : ICommandHandler<CreateMemberCommand>
 {
-    private readonly IMemberRepository _memberRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMemberRepository _memberRepository = memberRepository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public CreateMemberCommandHandler(
-        IMemberRepository memberRepository,
-        IUnitOfWork unitOfWork)
-    {
-        _memberRepository = memberRepository;
-        _unitOfWork = unitOfWork;
-    }
     public async Task<Result> Handle(CreateMemberCommand request, CancellationToken cancellationToken)
     {
         var emailResult = Email.Create(request.Email);
@@ -33,7 +28,7 @@ internal sealed class CreateMemberCommandHandler : ICommandHandler<CreateMemberC
 
         _memberRepository.Add(member);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _unitOfWork.Commit(cancellationToken);
 
         return Result.Success();
     }

@@ -75,5 +75,13 @@ namespace ContractManagement.Domain.Erros
                 "Monetary value cannot be negative.");
         }
 
+        public static class Period
+        {
+            public static readonly Error NegativeValue = new(
+                "Periodo.FimMaiorInicio",
+                "O periodo do fim é maior que o inicio."
+                );
+        }
+
     }
 }

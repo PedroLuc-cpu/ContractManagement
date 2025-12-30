@@ -5,6 +5,6 @@
     /// </summary>
     public interface IUnitOfWork
     {
-        Task SaveChangesAsync(CancellationToken cancellationToken = default);
+        Task Commit(CancellationToken cancellationToken = default);
     }
 }

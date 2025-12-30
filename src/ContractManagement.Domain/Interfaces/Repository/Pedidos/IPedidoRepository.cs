@@ -3,7 +3,7 @@ using ContractManagement.Domain.Primitives;
 
 namespace ContractManagement.Domain.Interfaces.Repository.Pedidos
 {
-    public interface IPedidoRepository : IBaseRepository<Pedido>, IUnitOfWork
+    public interface IPedidoRepository : IBaseRepository<Pedido>
     {
         Task<Pedido> ListarComItens(Guid id);
         Task Adicionar(Pedido pedido, CancellationToken cancellationToken = default);

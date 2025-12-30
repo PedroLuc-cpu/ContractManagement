@@ -19,7 +19,6 @@ namespace ContractManagement.Persistence.Repository.Catalogo
         public async Task CreateProduto(Produto produto, CancellationToken cancellationToken = default)
         {
             await _dbSet.AddAsync(produto, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
 
         }
 

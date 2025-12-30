@@ -1,5 +1,6 @@
 ﻿using ContractManagement.Application.Abstractions.Messaging;
 using ContractManagement.Domain.Entity.Catalogo;
+using ContractManagement.Domain.Interfaces;
 using ContractManagement.Domain.Interfaces.Repository;
 using ContractManagement.Domain.Interfaces.Services;
 using ContractManagement.Domain.Shared;
@@ -7,9 +8,10 @@ using ContractManagement.Domain.Shared;
 
 namespace ContractManagement.Application.Product.Command
 {
-    internal sealed class CreateProductCommandHandler(IProdutoRepository produtoRepository, IEmailService emailService) : ICommandHandler<CreateProductCommand>
+    internal sealed class CreateProductCommandHandler(IProdutoRepository produtoRepository, IEmailService emailService, IUnitOfWork unitOfWork) : ICommandHandler<CreateProductCommand>
     {
         private readonly IProdutoRepository _produtoRepository = produtoRepository;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IEmailService _emailService = emailService;
 
         public async Task<Result> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -35,6 +37,7 @@ namespace ContractManagement.Application.Product.Command
                 request.Actve);
 
             await _produtoRepository.CreateProduto(produto, cancellationToken);
+            await _unitOfWork.Commit(cancellationToken);
             await _emailService.SendEmailAsync("gemaluzente2015@gmail.com", "O Produto foi cadastrado com sucesso", "<h1>Obrigado por se registrar 🎉</h1>");
             return Result.Success();
         }

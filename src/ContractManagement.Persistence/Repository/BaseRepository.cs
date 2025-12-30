@@ -9,7 +9,7 @@ namespace ContractManagement.Persistence.Repository
         protected readonly ContractManagementContext _context = context;
         protected readonly DbSet<T> _dbSet = context.Set<T>();
 
-        public async Task DeleteAsync(T entity, CancellationToken cancellationToken = default) => await _dbSet.Where(b => b.Equals(entity)).ExecuteDeleteAsync();
+        public async Task DeleteAsync(T entity, CancellationToken cancellationToken = default) => await _dbSet.Where(b => b.Equals(entity)).ExecuteDeleteAsync(cancellationToken);
 
         public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken) => await _dbSet.ToListAsync(cancellationToken);
 

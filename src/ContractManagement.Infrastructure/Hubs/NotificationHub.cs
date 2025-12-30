@@ -1,5 +1,4 @@
 ﻿using ContractManagement.Infrastructure.Identity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using SignalRSwaggerGen.Attributes;
@@ -7,7 +6,7 @@ using SignalRSwaggerGen.Attributes;
 namespace ContractManagement.Infrastructure.Hubs
 {
     [SignalRHub]
-    public class ContractManagementHub(UserManager<ApplicationUser> userManager) : Hub
+    public class NotificationHub(UserManager<ApplicationUser> userManager) : Hub
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         public async Task SendMessage(string user, string message)
