@@ -1,5 +1,4 @@
 using ContractManagement.Api.Configuration;
-using ContractManagement.Api.Extensions;
 using ContractManagement.Api.OptionSetup;
 using ContractManagement.Infrastructure.Hubs;
 using ContractManagement.Infrastructure.Identity;
@@ -31,6 +30,7 @@ builder.Services.AddDbContext<ContractManagementContext>((serviceProvider, dbCon
     });
     dbContextOptionsBuilder.EnableDetailedErrors(false);
     dbContextOptionsBuilder.EnableSensitiveDataLogging(true);
+    dbContextOptionsBuilder.LogTo(Console.WriteLine);
 });
 
 builder.Services.AddAuthentication(options =>
@@ -113,7 +113,7 @@ var app = builder.Build();
 //    app.ApplyMigration();
 //}
 
-app.MapHub<ContractManagementHub>("/contractmanagementHub");
+app.MapHub<NotificationHub>("/contractmanagementHub");
 
 app.UseSwaggerConfiguration(builder.Environment);
 

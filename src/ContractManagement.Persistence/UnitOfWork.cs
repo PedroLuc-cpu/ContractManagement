@@ -1,12 +1,21 @@
 ﻿using ContractManagement.Domain.Interfaces;
+using ContractManagement.Infrastructure.Persistence;
 
 namespace ContractManagement.Persistence
 {
-    public sealed class UnitOfWork : IUnitOfWork
+    public sealed class UnitOfWork(ContractManagementContext context) : IUnitOfWork
     {
-        public Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        private readonly ContractManagementContext _context = context;
+
+        public async Task Commit(CancellationToken cancellationToken = default)
         {
-            return Task.CompletedTask;
+            foreach (var entry in _context.ChangeTracker.Entries())
+            {
+                Console.WriteLine($"{entry.Entity.GetType().Name} - {entry.State}");
+            }
+
+            await _context.SaveChangesAsync(cancellationToken);
+
         }
     }
 }

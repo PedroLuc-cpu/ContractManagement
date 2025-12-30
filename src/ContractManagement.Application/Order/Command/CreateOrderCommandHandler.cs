@@ -1,15 +1,17 @@
 ﻿using ContractManagement.Application.Abstractions.Messaging;
 using ContractManagement.Domain.Entity.Pedidos;
+using ContractManagement.Domain.Interfaces;
 using ContractManagement.Domain.Interfaces.Repository.Clientes;
 using ContractManagement.Domain.Interfaces.Repository.Pedidos;
 using ContractManagement.Domain.Shared;
 
 namespace ContractManagement.Application.Order.Command
 {
-    internal sealed class CreateOrderCommandHandler(IPedidoRepository pedidoRepository, IClienteRepository clienteRepository) : ICommandHandler<CreateOrderCommand>
+    internal sealed class CreateOrderCommandHandler(IPedidoRepository pedidoRepository, IClienteRepository clienteRepository, IUnitOfWork unitOfWork) : ICommandHandler<CreateOrderCommand>
     {
         private readonly IPedidoRepository _pedidoRepository = pedidoRepository;
         private readonly IClienteRepository _clienteRepository = clienteRepository;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
         public async Task<Result> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var clienteExists = await _clienteRepository.GetByIdAsync(request.IdCliente, cancellationToken);
@@ -25,7 +27,7 @@ namespace ContractManagement.Application.Order.Command
                 pedido.AdicionarItem(item.ProductId, item.NomeProduto, item.Quantity, item.UnitPrice);
             }
             await _pedidoRepository.Adicionar(pedido, cancellationToken);
-            await _pedidoRepository.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.Commit(cancellationToken);
 
             return Result.Success();
         }
