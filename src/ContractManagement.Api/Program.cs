@@ -1,5 +1,7 @@
 using ContractManagement.Api.Configuration;
 using ContractManagement.Api.OptionSetup;
+using ContractManagement.Domain.Interfaces.Services;
+using ContractManagement.Infrastructure.Email;
 using ContractManagement.Infrastructure.Hubs;
 using ContractManagement.Infrastructure.Identity;
 using ContractManagement.Infrastructure.Options;
@@ -35,29 +37,33 @@ builder.Services.AddDbContext<ContractManagementContext>((serviceProvider, dbCon
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = IdentityConstants.BearerScheme;
-    options.DefaultChallengeScheme = IdentityConstants.BearerScheme;
+    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
 })
-    .AddBearerToken(IdentityConstants.BearerScheme).AddCookie(IdentityConstants.ApplicationScheme, options =>
+.AddBearerToken(IdentityConstants.BearerScheme)
+.AddCookie(IdentityConstants.ApplicationScheme, options =>
+{
+    options.Cookie.Name = "cm-auth";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+    options.Events = new CookieAuthenticationEvents
     {
-        options.Cookie.Name = "cm-auth";
-        options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.Cookie.SameSite = SameSiteMode.None;
-        options.Events = new CookieAuthenticationEvents
+        OnRedirectToLogin = ctx =>
         {
-            OnRedirectToLogin = ctx =>
-            {
-                ctx.Response.StatusCode = 401;
-                return Task.CompletedTask;
-            }
-        };
-    });
+            ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        }
+    };
+});
+
 
 builder.Services.AddIdentityCore<ApplicationUser>()
     .AddEntityFrameworkStores<ContractManagementContext>()
     .AddSignInManager<SignInManager<ApplicationUser>>()
-    .AddApiEndpoints();
+    .AddApiEndpoints()
+    .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("Default"); ;
 
 builder.Services.AddAuthorization();
 
@@ -90,6 +96,9 @@ builder.Services.AddMediatR(m =>
     m.LicenseKey = MediatRLicence;
     m.RegisterServicesFromAssembly(ContractManagement.Application.AssemblyReference.Assembly);
 });
+
+builder.Services.AddTransient<IEmailSender<ApplicationUser>, SmtpEmailService>();
+
 
 builder.Services
     .AddControllers()
