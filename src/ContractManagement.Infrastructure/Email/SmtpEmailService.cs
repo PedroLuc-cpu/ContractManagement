@@ -1,6 +1,7 @@
 ﻿using ContractManagement.Domain.Interfaces.Services;
 using ContractManagement.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
 
@@ -46,13 +47,15 @@ namespace ContractManagement.Infrastructure.Email
             await _smtpClient.SendMailAsync(message);
         }
 
-        public SmtpEmailService()
+        public SmtpEmailService(IConfiguration configuration)
         {
-            var host = "smtp.gmail.com";
-            var port = 587;
-            var user = "pedrolucas@bemasoft.com.br";
-            var password = "baue vmoq avvt kbvl ";
-            _email = "pedrolucas@bemasoft.com.br";
+           var host = configuration["Smtp:Host"];
+           var port = int.Parse(configuration["Smtp:Port"] ?? "");
+           var user = configuration["Smtp:User"];
+           var password = configuration["Smtp:Password"];
+           _email = configuration["Smtp:FromEmail"] ?? "";
+
+
 
             _smtpClient = new SmtpClient(host, port)
             {
