@@ -2,10 +2,12 @@
 using ContractManagement.Application.RequestInternal.Query;
 using ContractManagement.Domain.Shared;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContractManagement.Presentation.Controllers
 {
+    [Authorize]
     [Route("solicitacao-interna")]
     [Produces("application/json")]
     public sealed class RequestInternalController(ISender sender) : MainController
