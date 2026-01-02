@@ -13,9 +13,8 @@ namespace ContractManagement.Persistence.Repository
         }
         public async Task<IEnumerable<Pedido>> ListaPaginada(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
         {
-            var orders = await _dbSet.AsNoTracking()
+            var orders = await _dbSet
                 .Include(item => item.Items)
-                .Include(item => item.IdCliente)
                 .OrderBy(d => d.DataCriacao)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
@@ -24,24 +23,5 @@ namespace ContractManagement.Persistence.Repository
             return orders;
         }
 
-        public async Task<Pedido> ListarComItens(Guid id)
-        {
-            
-            var pedidoItems = await _dbSet
-                .Include(p => p.Items)
-                .Include(item => item.IdCliente)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (pedidoItems is not null)
-            {
-                return pedidoItems;
-            }
-            throw new KeyNotFoundException("Pedido não encontrado");
-        }
-
-        public Task SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            return _context.SaveChangesAsync(cancellationToken);
-        }
-    }
+   }
 }

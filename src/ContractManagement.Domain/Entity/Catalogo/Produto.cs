@@ -7,15 +7,15 @@ namespace ContractManagement.Domain.Entity.Catalogo
 {
     public class Produto : AggregateRoot
     {
-        public string Nome { get; private set; }
+        public string Nome { get; private set; } = string.Empty;
         public byte[]? Imagem { get; private set; }
         public bool Ativo { get; private set; }
-        public string Observacao { get; private set; }
-        public string CodigoBarras { get; private set; }
-        public string Codigo { get; private set; }
-        public string UnidadeMedida { get; private set; }
-        public Money PrecoVenda { get; private set; }
-        public Money PrecoCusto { get; private set; }
+        public string Observacao { get; private set; } = string.Empty;
+        public string CodigoBarras { get; private set; } = string.Empty;
+        public string Codigo { get; private set; } = string.Empty;
+        public string UnidadeMedida { get; private set; } = string.Empty;
+        public Money PrecoVenda { get; private set; } = Money.Create(0).Value;
+        public Money PrecoCusto { get; private set; } = Money.Create(0).Value;
         public int EstoqueAtual { get; private set; }
         public int EstoqueMinimo { get; private set; }
         public int EstoqueMaximo { get; private set; }

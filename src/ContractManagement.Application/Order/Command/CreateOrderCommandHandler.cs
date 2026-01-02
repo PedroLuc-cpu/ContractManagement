@@ -24,12 +24,15 @@ namespace ContractManagement.Application.Order.Command
 
             foreach (var item in request.Itens)
             {
-                pedido.AdicionarItem(item.ProductId, item.NomeProduto, item.Quantity, item.UnitPrice);
+                pedido.AdicionarItem(item.ProductId, item.NomeProduto, item.UnitPrice, item.Quantity);
             }
+
             await _pedidoRepository.Adicionar(pedido, cancellationToken);
             await _unitOfWork.Commit(cancellationToken);
 
-            return Result.Success();
+
+
+            return Result.Success(pedido.Numero);
         }
     }
 }

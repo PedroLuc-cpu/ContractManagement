@@ -8,9 +8,27 @@ namespace ContractManagement.Application.Order.Query
     {
         private readonly IPedidoRepository _pedidoRepository = pedidoRepository;
 
-        public Task<Result<IEnumerable<GetOrdersQueryResponse>>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<GetOrdersQueryResponse>>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+
+            var orders = await _pedidoRepository.ListaPaginada(request.PageNumber, request.PageSize, cancellationToken);
+                
+
+            var response = orders.Select(o => new GetOrdersQueryResponse(
+                o.Id,
+                o.IdCliente,
+                o.DataCriacao,
+                o.ValorTotal.Value,
+                [.. o.Items.Select(i => new GetOrdersQueryResponseItemOrder(
+                        i.Id,
+                        i.NomeProduto,
+                        i.Quantidade,
+                        i.PrecoUnitario.Value,
+                        i.Total.Value
+                    ))]
+            ));
+
+            return Result.Success<IEnumerable<GetOrdersQueryResponse>>(response);
         }
     }
 }

@@ -8,28 +8,23 @@ namespace ContractManagement.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Produto> builder)
         {
-            builder.ToTable("produtos");
+            builder.ToTable(nameof(Produto));
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Nome)
-                .HasColumnName("nome")
                 .HasMaxLength(200)
                 .IsRequired();
-            builder.Property(p => p.Imagem).HasColumnName("image");
+            builder.Property(p => p.Imagem);
             builder.Property(p => p.Observacao)
-                .HasColumnName("obersavao")
                 .HasMaxLength(200)
                 .IsRequired();
 
             builder.Property(p => p.CodigoBarras)
-                .HasColumnName("cod_barras")
                 .HasMaxLength(14);
 
             builder.Property(p => p.Codigo)
-                .HasColumnName("codigo")
                 .HasMaxLength(10);
 
             builder.Property(p => p.UnidadeMedida)
-                .HasColumnName("und_medida")
                 .HasMaxLength(10)
                 .IsRequired();
 
@@ -37,50 +32,46 @@ namespace ContractManagement.Infrastructure.Persistence.Configurations
             {
                 p_custo.Property(p => p.Value)
                     .HasPrecision(18, 2)
-                    .HasColumnName("preco_custo");
+                    .HasColumnName("PrecoCusto");
             });
             builder.OwnsOne(p => p.PrecoVenda, p_venda =>
             {
                 p_venda.Property(p => p.Value)
                 .HasPrecision(18, 2)
-                .HasColumnName("preco_venda").IsRequired();
+                .HasColumnName("PrecoVenda").IsRequired();
             });
             
             builder.OwnsOne(p => p.Disponibilidade, disponibilidade =>
             {
-                disponibilidade.ToTable("disponibilidade_produto");
-                disponibilidade.Property(d => d.Inicio).HasColumnName("inicio");
-                disponibilidade.Property(d => d.Fim).HasColumnName("fim");
+                disponibilidade.ToTable("DisponibilidadeProduto");
+                disponibilidade.Property(d => d.Inicio);
+                disponibilidade.Property(d => d.Fim);
             });
 
             builder.OwnsOne(p => p.Promocao, p_promocao => 
             {
-                p_promocao.ToTable("promocao_produto");
-                p_promocao.Property(pp => pp.DescontoPercentual).HasPrecision(18, 2).HasColumnName("desconto_percentual");
+                p_promocao.ToTable("PromocaoProduto");
+                p_promocao.Property(pp => pp.DescontoPercentual).HasPrecision(18, 2);
                 p_promocao.OwnsOne(periodo_promo => periodo_promo.Periodo, p_promo =>
                 {
-                    p_promo.Property(pp => pp.Inicio).HasColumnName("inicio");
-                    p_promo.Property(pp => pp.Fim).HasColumnName("fim");
+                    p_promo.Property(pp => pp.Inicio);
+                    p_promo.Property(pp => pp.Fim);
                 });
             });
 
             builder.Property(p => p.EstoqueAtual)
-                .HasColumnName("estoque_atual")
                 .HasMaxLength(200)
                 .IsRequired();
 
             builder.Property(p => p.EstoqueMinimo)
-                .HasColumnName("estoque_min")
                 .HasMaxLength(200)
                 .IsRequired();
 
             builder.Property(p => p.EstoqueMaximo)
-                .HasColumnName("estoque_max")
                 .HasMaxLength(200)
                 .IsRequired();
 
             builder.Property(p => p.Ativo)
-                .HasColumnName("ativo")
                 .IsRequired();
         }
     }

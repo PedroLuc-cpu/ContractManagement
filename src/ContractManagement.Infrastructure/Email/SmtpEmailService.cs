@@ -2,6 +2,7 @@
 using ContractManagement.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
 
@@ -11,6 +12,18 @@ namespace ContractManagement.Infrastructure.Email
     {
         private readonly SmtpClient _smtpClient;
         private readonly string _email;
+
+        public SmtpEmailService(IOptions<SmtpEmailOptions> options)
+        {
+            var smtpOptions = options.Value;
+            _email = smtpOptions.FromEmail;
+            _smtpClient = new SmtpClient(smtpOptions.Host, smtpOptions.Port)
+            {
+                Credentials = new NetworkCredential(smtpOptions.User, smtpOptions.Password),
+                EnableSsl = smtpOptions.EnableSsl
+            };
+        }
+
         public async Task SendEmailAsync(string to, string subject, string body)
         {
             var message = new MailMessage(_email, to, subject, body)
@@ -47,22 +60,5 @@ namespace ContractManagement.Infrastructure.Email
             await _smtpClient.SendMailAsync(message);
         }
 
-        public SmtpEmailService(IConfiguration configuration)
-        {
-           var host = configuration["Smtp:Host"];
-           var port = int.Parse(configuration["Smtp:Port"] ?? "");
-           var user = configuration["Smtp:User"];
-           var password = configuration["Smtp:Password"];
-           _email = configuration["Smtp:FromEmail"] ?? "";
-
-
-
-            _smtpClient = new SmtpClient(host, port)
-            {
-                Credentials = new NetworkCredential(user, password),
-                EnableSsl = true
-            };
-
-        }
     }
 }

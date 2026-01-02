@@ -9,7 +9,12 @@ namespace ContractManagement.Domain.Enums
         [Description("Aprovado")]
         Aprovado = 2,
         [Description("Rejeitado")]
-        Rejeitado = 3
+        Rejeitado = 3,
+        [Description("Cancelado")]
+        Cancelado = 4,
+        [Description("Finalizado")]
+        Finalizado = 5
+
     }
     public static class StatusPedidoEnumExtensions
     {

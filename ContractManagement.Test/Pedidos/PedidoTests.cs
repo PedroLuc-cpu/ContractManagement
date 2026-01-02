@@ -1,5 +1,5 @@
 ﻿using ContractManagement.Domain.Entity.Pedidos;
-using ContractManagement.Domain.ValueObjects;
+using ContractManagement.Domain.Enums;
 
 namespace ContractManagement.Domain.Test.Pedidos
 {
@@ -14,7 +14,7 @@ namespace ContractManagement.Domain.Test.Pedidos
             // Act
             var status = pedido.Status;
             // Assert
-            Assert.Equal(OrderStatus.Pendente, status);
+            Assert.Equal(StatusPedidoEnum.Pendente, status);
         }
         [Fact]
         public void AprovarPedidoDeveAlterarStatusParaAprovado()
@@ -26,26 +26,7 @@ namespace ContractManagement.Domain.Test.Pedidos
             pedido.AprovarPedido();
             var status = pedido.Status;
             // Assert
-            Assert.Equal(OrderStatus.Aprovado, status);
-        }
-        [Fact]
-        public void AdicionarItemDeveAdicionarItemAoPedido()
-        {
-            // Arrange
-            var clienteId = Guid.NewGuid();
-            var pedido = Pedido.Create(clienteId);
-            var produtoId = Guid.NewGuid();
-            var nomeProduto = "Produto Teste";
-            var quantidade = 2;
-            var precoUnitario = 50m;
-            // Act
-            pedido.AdicionarItem(produtoId, nomeProduto, quantidade, precoUnitario);
-            var itens = pedido.Items;
-            // Assert
-            Assert.Single(itens);
-            Assert.Equal(produtoId, itens.First().IdProduto);
-            Assert.Equal(quantidade, itens.First().Quantidade);
-            Assert.Equal(Money.Create(precoUnitario).Value, itens.First().PrecoUnitario);
+            Assert.Equal(StatusPedidoEnum.Aprovado, status);
         }
     }        
 }

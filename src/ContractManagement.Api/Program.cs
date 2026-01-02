@@ -1,6 +1,5 @@
 using ContractManagement.Api.Configuration;
 using ContractManagement.Api.OptionSetup;
-using ContractManagement.Domain.Interfaces.Services;
 using ContractManagement.Infrastructure.Email;
 using ContractManagement.Infrastructure.Hubs;
 using ContractManagement.Infrastructure.Identity;
@@ -10,6 +9,7 @@ using Marten;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +18,11 @@ builder.Services.AddSignalR();
 builder.Configuration.SetDefaultConfiguration(builder.Environment);
 
 builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
+builder.Services.AddOptions<SmtpEmailOptions>()
+    .BindConfiguration("SmtpEmail")
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
 
 builder.Services.AddDbContext<ContractManagementContext>((serviceProvider, dbContextOptionsBuilder) =>
 {
@@ -63,7 +68,9 @@ builder.Services.AddIdentityCore<ApplicationUser>()
     .AddEntityFrameworkStores<ContractManagementContext>()
     .AddSignInManager<SignInManager<ApplicationUser>>()
     .AddApiEndpoints()
-    .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("Default"); ;
+    .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("Default");
+
+builder.Services.AddOpenApi();
 
 builder.Services.AddAuthorization();
 
@@ -122,9 +129,10 @@ var app = builder.Build();
 //    app.ApplyMigration();
 //}
 
-app.MapHub<NotificationHub>("/contractmanagementHub");
+app.MapOpenApi();
+app.MapScalarApiReference();
 
-app.UseSwaggerConfiguration(builder.Environment);
+app.MapHub<NotificationHub>("/contractmanagementHub");
 
 app.UseCors("Total");
 

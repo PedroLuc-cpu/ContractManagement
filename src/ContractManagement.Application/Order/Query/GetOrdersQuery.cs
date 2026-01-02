@@ -2,7 +2,7 @@
 
 namespace ContractManagement.Application.Order.Query
 {
-    public sealed record GetOrdersQuery: IQuery<IEnumerable<GetOrdersQueryResponse>>
+    public sealed record GetOrdersQuery(int PageNumber, int PageSize) : IQuery<IEnumerable<GetOrdersQueryResponse>>
     {
     }
 }

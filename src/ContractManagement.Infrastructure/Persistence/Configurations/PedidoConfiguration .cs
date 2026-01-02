@@ -9,38 +9,30 @@ namespace ContractManagement.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Pedido> builder)
         {
-            builder.ToTable("pedido");
+            builder.ToTable(nameof(Pedido));
             builder.HasKey(p => p.Id);
+            builder.Property(p => p.Id).ValueGeneratedNever();
             builder.OwnsOne(p => p.ValorTotal, valortotal =>
             {
-                valortotal.Property(p => p.Value).HasColumnName("valor_total").HasColumnType("numeric");
+                valortotal.Property(p => p.Value).HasColumnName("ValorTotal").HasPrecision(18,2);
             });
-            builder.Property(p => p.DataCriacao).HasColumnName("dt_created").IsRequired();
-            builder.Property(p => p.DataAtualizao).HasColumnName("dt_update");
-            builder.HasIndex(p => p.Numero).IsUnique();
-            builder.Property(p => p.Numero).HasColumnName("numero_pedido").HasMaxLength(20).IsRequired();
-            builder.Property(p => p.IdCliente).HasColumnName("id_cliente").IsRequired();
-            builder.OwnsOne(p => p.Status, status =>
+            builder.Property(p => p.DataCriacao).IsRequired();
+            builder.Property(p => p.DataAtualizao);
+
+            builder.OwnsOne(p => p.Numero, numero =>
             {
-                status.Property(s => s.Status).HasColumnType("varchar(10)").HasColumnName("status").IsRequired();                
+                numero.Property(n => n.Value).HasColumnName("NumeroPedido").HasMaxLength(50).IsRequired();
+                numero.HasIndex(n => n.Value).IsUnique();
             });
-            builder.OwnsMany(p => p.Items, item =>
-            {
-            item.ToTable("item_pedido");
-            item.WithOwner().HasForeignKey("PedidoId");
-            item.Property<Guid>("Id");
-            item.HasKey("Id");
-            item.Property(i => i.IdProduto).HasColumnName("id_produto").IsRequired();
-            item.Property(i => i.Produto).HasColumnName("produto").HasMaxLength(200).IsRequired();
-            item.Property(i => i.Quantidade).HasColumnName("quantidade").IsRequired();
-            item.OwnsOne(i => i.PrecoUnitario, pu =>
-            {
-                pu.Property(p => p.Value).HasColumnName("preco_unitario").HasColumnType("numeric").IsRequired();
-            });
-                item.Ignore(i => i.SubTotal);
-                //item.Property<decimal>("SubTotal").HasColumnName("sub_total").HasPrecision(18, 2).HasComputedColumnSql("[quantidade] * [preco_unitario]");
-            });
+
+            builder.Property(p => p.Status).HasColumnName("StatusPedido").HasConversion<string>().IsRequired();
+
+            builder.Property(p => p.IdCliente).HasColumnName("IdCliente").IsRequired();
+            
+            builder.HasMany(item => item.Items).WithOne().HasForeignKey("PedidoId").OnDelete(DeleteBehavior.Cascade);
+
             builder.Navigation(p => p.Items).Metadata.SetField("_Items");
+
             builder.Navigation(p => p.Items).UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
