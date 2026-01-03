@@ -1,6 +1,7 @@
 ﻿using ContractManagement.Domain.Common.Exceptions;
 using ContractManagement.Domain.Common.Validations;
 using ContractManagement.Domain.Enums;
+using ContractManagement.Domain.Events;
 using ContractManagement.Domain.Primitives;
 using ContractManagement.Domain.ValueObjects;
 
@@ -23,12 +24,28 @@ namespace ContractManagement.Domain.Entity.Pedidos
             ValorTotal = Money.Create(0).Value;
         }
 
-        public static Pedido Create(Guid idCliente)
+        public static Pedido Create(Guid idCliente, IReadOnlyCollection<PedidoItemData> itens)
         {
             Guard.AgainstEmptyGuid(idCliente, nameof(idCliente));
+            Guard.Againts<DomainException>(itens.Count == 0, "Um pedido deve conter ao menos um item.");
 
-            
             var pedido = new Pedido(idCliente);
+
+            foreach (var item in itens)
+            {
+                pedido.AdicionarItem(item.IdProduto, item.NomeProduto, item.PrecoUnitario, item.Quantidade);
+            }
+
+            pedido.RaiseDomainEvent(
+                    new PedidoCriadoEvent(
+                        pedido.Id,
+                        [.. pedido.Items.Select(i =>
+                            new ItemPedidoSnapshot(i.IdProduto, i.Quantidade)
+                        )]
+                    )
+                );
+
+
             return pedido;
         }
 

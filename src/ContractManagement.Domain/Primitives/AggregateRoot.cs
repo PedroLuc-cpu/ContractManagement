@@ -9,5 +9,8 @@ namespace ContractManagement.Domain.Primitives
         {
             _domainEvents.Add(domainEvent);
         }
+
+        public IReadOnlyCollection<IDomainEvent> GetDomainEvents() => _domainEvents.AsReadOnly();
+        public void ClearDomainEvents() => _domainEvents.Clear();
     }
 }

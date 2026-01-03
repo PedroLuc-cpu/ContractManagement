@@ -27,6 +27,11 @@ namespace ContractManagement.Domain.Entity
             return estoque;
         }
 
+        public bool PossuiEstoqueDisponivel(int quantidade)
+        {
+            return QuantidadeDisponivel >= quantidade;
+        }
+
         public void ReservarEstoque(int quantidade)
         {
             Guard.Againts<ArgumentException>(quantidade <= 0, "Quantidade a reservar deve ser maior que zero.");
