@@ -1,4 +1,4 @@
-﻿using ContractManagement.Domain.Entity;
+﻿using ContractManagement.Domain.Entity.Estoques;
 
 namespace ContractManagement.Domain.Interfaces.Repository
 {

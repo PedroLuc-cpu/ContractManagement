@@ -3,6 +3,7 @@ using System;
 using ContractManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ContractManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ContractManagementContext))]
-    partial class ContractManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20260105183404_AdicionadoTabelaNotaEntradaEItemNotaEntrada")]
+    partial class AdicionadoTabelaNotaEntradaEItemNotaEntrada
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,7 +285,7 @@ namespace ContractManagement.Infrastructure.Migrations
 
                     b.HasIndex("IdSolicitacao");
 
-                    b.ToTable("SolitacaoHistorico", (string)null);
+                    b.ToTable("SolitacaoHistorico");
                 });
 
             modelBuilder.Entity("ContractManagement.Infrastructure.Identity.ApplicationUser", b =>
@@ -499,25 +502,6 @@ namespace ContractManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("ContractManagement.Domain.Entity.Catalogo.Produto", b =>
                 {
-                    b.OwnsOne("ContractManagement.Domain.ValueObjects.HorarioDisponibilidade", "Disponibilidade", b1 =>
-                        {
-                            b1.Property<Guid>("ProdutoId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<TimeSpan>("Fim")
-                                .HasColumnType("interval");
-
-                            b1.Property<TimeSpan>("Inicio")
-                                .HasColumnType("interval");
-
-                            b1.HasKey("ProdutoId");
-
-                            b1.ToTable("DisponibilidadeProduto", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProdutoId");
-                        });
-
                     b.OwnsOne("ContractManagement.Domain.ValueObjects.Money", "PrecoCusto", b1 =>
                         {
                             b1.Property<Guid>("ProdutoId")
@@ -534,7 +518,7 @@ namespace ContractManagement.Infrastructure.Migrations
 
                             b1.HasKey("ProdutoId");
 
-                            b1.ToTable("Produto", (string)null);
+                            b1.ToTable("Produto");
 
                             b1.WithOwner()
                                 .HasForeignKey("ProdutoId");
@@ -556,7 +540,26 @@ namespace ContractManagement.Infrastructure.Migrations
 
                             b1.HasKey("ProdutoId");
 
-                            b1.ToTable("Produto", (string)null);
+                            b1.ToTable("Produto");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProdutoId");
+                        });
+
+                    b.OwnsOne("ContractManagement.Domain.ValueObjects.HorarioDisponibilidade", "Disponibilidade", b1 =>
+                        {
+                            b1.Property<Guid>("ProdutoId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<TimeSpan>("Fim")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan>("Inicio")
+                                .HasColumnType("interval");
+
+                            b1.HasKey("ProdutoId");
+
+                            b1.ToTable("DisponibilidadeProduto", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ProdutoId");
@@ -591,7 +594,7 @@ namespace ContractManagement.Infrastructure.Migrations
 
                                     b2.HasKey("PromocaoProdutoId");
 
-                                    b2.ToTable("PromocaoProduto", (string)null);
+                                    b2.ToTable("PromocaoProduto");
 
                                     b2.WithOwner()
                                         .HasForeignKey("PromocaoProdutoId");
@@ -629,7 +632,7 @@ namespace ContractManagement.Infrastructure.Migrations
                             b1.HasIndex("Value")
                                 .IsUnique();
 
-                            b1.ToTable("Cliente", (string)null);
+                            b1.ToTable("Cliente");
 
                             b1.WithOwner()
                                 .HasForeignKey("ClienteId");
@@ -685,7 +688,7 @@ namespace ContractManagement.Infrastructure.Migrations
 
                             b1.HasKey("ClienteId");
 
-                            b1.ToTable("Cliente", (string)null);
+                            b1.ToTable("Cliente");
 
                             b1.WithOwner()
                                 .HasForeignKey("ClienteId");
@@ -703,7 +706,7 @@ namespace ContractManagement.Infrastructure.Migrations
 
                             b1.HasKey("ClienteId");
 
-                            b1.ToTable("Cliente", (string)null);
+                            b1.ToTable("Cliente");
 
                             b1.WithOwner()
                                 .HasForeignKey("ClienteId");
@@ -751,7 +754,7 @@ namespace ContractManagement.Infrastructure.Migrations
 
                             b1.HasKey("ItemPedidoId");
 
-                            b1.ToTable("ItemPedido", (string)null);
+                            b1.ToTable("ItemPedido");
 
                             b1.WithOwner()
                                 .HasForeignKey("ItemPedidoId");
@@ -763,28 +766,6 @@ namespace ContractManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("ContractManagement.Domain.Entity.Pedidos.Pedido", b =>
                 {
-                    b.OwnsOne("ContractManagement.Domain.ValueObjects.NumeroPedido", "Numero", b1 =>
-                        {
-                            b1.Property<Guid>("PedidoId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("character varying(50)")
-                                .HasColumnName("NumeroPedido");
-
-                            b1.HasKey("PedidoId");
-
-                            b1.HasIndex("Value")
-                                .IsUnique();
-
-                            b1.ToTable("Pedido", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("PedidoId");
-                        });
-
                     b.OwnsOne("ContractManagement.Domain.ValueObjects.Money", "ValorTotal", b1 =>
                         {
                             b1.Property<Guid>("PedidoId")
@@ -801,7 +782,29 @@ namespace ContractManagement.Infrastructure.Migrations
 
                             b1.HasKey("PedidoId");
 
-                            b1.ToTable("Pedido", (string)null);
+                            b1.ToTable("Pedido");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PedidoId");
+                        });
+
+                    b.OwnsOne("ContractManagement.Domain.ValueObjects.NumeroPedido", "Numero", b1 =>
+                        {
+                            b1.Property<Guid>("PedidoId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("character varying(50)")
+                                .HasColumnName("NumeroPedido");
+
+                            b1.HasKey("PedidoId");
+
+                            b1.HasIndex("Value")
+                                .IsUnique();
+
+                            b1.ToTable("Pedido");
 
                             b1.WithOwner()
                                 .HasForeignKey("PedidoId");
@@ -831,7 +834,7 @@ namespace ContractManagement.Infrastructure.Migrations
 
                             b1.HasKey("SolicitacaoInternaId");
 
-                            b1.ToTable("Solicitacoes", (string)null);
+                            b1.ToTable("Solicitacoes");
 
                             b1.WithOwner()
                                 .HasForeignKey("SolicitacaoInternaId");

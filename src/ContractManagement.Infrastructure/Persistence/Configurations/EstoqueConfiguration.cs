@@ -1,4 +1,4 @@
-﻿using ContractManagement.Domain.Entity;
+﻿using ContractManagement.Domain.Entity.Estoques;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

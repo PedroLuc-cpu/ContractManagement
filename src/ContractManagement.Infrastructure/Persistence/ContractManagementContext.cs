@@ -1,6 +1,6 @@
-﻿using ContractManagement.Domain.Entity;
-using ContractManagement.Domain.Entity.Catalogo;
+﻿using ContractManagement.Domain.Entity.Catalogo;
 using ContractManagement.Domain.Entity.Clientes;
+using ContractManagement.Domain.Entity.Estoques;
 using ContractManagement.Domain.Entity.Pedidos;
 using ContractManagement.Domain.Entity.Solicitacao;
 using ContractManagement.Domain.ValueObjects;
@@ -18,6 +18,7 @@ namespace ContractManagement.Infrastructure.Persistence
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<Promocao> Promocao { get; set; }
         public DbSet<Estoque> Estoque { get; set; }
+        public DbSet<NotaEntrada> NotaEntradas { get; set; }
         public DbSet<SolicitacaoInterna> SolicitacaoInternas { get; set; }
 
         public ContractManagementContext(DbContextOptions<ContractManagementContext> options) : base(options)

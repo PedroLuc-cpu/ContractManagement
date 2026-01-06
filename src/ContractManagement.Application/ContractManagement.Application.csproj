@@ -22,6 +22,7 @@
   <ItemGroup>
     <PackageReference Include="Marten" Version="8.13.2" />
     <PackageReference Include="MediatR" Version="13.1.0" />
+    <PackageReference Include="Zeus.Net.NFe.NFCe" Version="2025.12.22.2042" />
   </ItemGroup>
 
   <ItemGroup>

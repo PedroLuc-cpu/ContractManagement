@@ -1,4 +1,4 @@
-﻿using ContractManagement.Domain.Entity;
+﻿using ContractManagement.Domain.Entity.Estoques;
 using ContractManagement.Domain.Interfaces.Repository;
 using ContractManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;

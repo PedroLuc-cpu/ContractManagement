@@ -2,7 +2,7 @@
 using ContractManagement.Domain.Events;
 using ContractManagement.Domain.Primitives;
 
-namespace ContractManagement.Domain.Entity
+namespace ContractManagement.Domain.Entity.Estoques
 {
     public class Estoque(Guid id, DateTime dataCriacao) : AggregateRoot(id, dataCriacao)
     {
@@ -40,6 +40,13 @@ namespace ContractManagement.Domain.Entity
             QuantidadeReservada += quantidade;
 
             RaiseDomainEvent(new EstoqueReservadoEvent(IdProduto, quantidade));
+        }
+
+        public void ReporEstoque(int quantidade)
+        {
+            Guard.Againts<ArgumentException>(quantidade <= 0, "Quantidade a repor deve ser maior que zero.");
+            QuantidadeDisponivel += quantidade;
+            RaiseDomainEvent(new EstoqueRepostoEvent(IdProduto, quantidade));
         }
     }
 }
