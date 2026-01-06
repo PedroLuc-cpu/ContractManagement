@@ -80,28 +80,27 @@ namespace ContractManagement.Domain.Entity.Pedidos
             RecalcularValorTotal();
         }
 
-        public void FinalizarPedido()
+        public void IniciarPagamento()
         {
             Guard.Againts<DomainException>(_Items.Count == 0, "Não é possível finalizar um pedido sem itens.");
+            Guard.Againts<DomainException>(Status != StatusPedidoEnum.Pendente, "Não pode iniciar o um pagamento que não pendente.");
             Status = StatusPedidoEnum.Pendente;
+            RaiseDomainEvent(new PagamentoInciadoEvent(Id, ValorTotal.Value));
         }
 
-        public void CancelarPedido()
-        {
-            Guard.Againts<DomainException>(Status != StatusPedidoEnum.Pendente, "Apenas pedidos pendentes podem ser cancelados.");
-            Status = StatusPedidoEnum.Cancelado;
-
-        }
-        public void AprovarPedido()
+        
+        public void ConfirmarPagamento()
         {
             Guard.Againts<DomainException>(Status != StatusPedidoEnum.Pendente, "Apenas pedidos pendentes podem ser aprovados.");
-            Status = StatusPedidoEnum.Aprovado;
+            Status = StatusPedidoEnum.Autorizado;
+            RaiseDomainEvent(new PagamentoConfirmadoEvent(Id, ValorTotal.Value));
 
-        }       
+
+        }
         private void ValidarPeditoEditavel()
         {
-            Guard.Againts<DomainException>(Status == StatusPedidoEnum.Aprovado, "Não é possível editar um pedido aprovado.");
-            Guard.Againts<DomainException>(Status == StatusPedidoEnum.Rejeitado, "Não é possível editar um pedido rejeitado.");
+            Guard.Againts<DomainException>(Status == StatusPedidoEnum.Autorizado, "Não é possível editar um pedido aprovado.");
+            Guard.Againts<DomainException>(Status == StatusPedidoEnum.Recusado, "Não é possível editar um pedido rejeitado.");
         }
 
         private void RecalcularValorTotal()

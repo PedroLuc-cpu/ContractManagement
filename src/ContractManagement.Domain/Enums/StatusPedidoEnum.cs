@@ -6,14 +6,10 @@ namespace ContractManagement.Domain.Enums
     {
         [Description("Pendente")]
         Pendente = 1,
-        [Description("Aprovado")]
-        Aprovado = 2,
-        [Description("Rejeitado")]
-        Rejeitado = 3,
-        [Description("Cancelado")]
-        Cancelado = 4,
-        [Description("Finalizado")]
-        Finalizado = 5
+        [Description("Autorizado")]
+        Autorizado = 2,
+        [Description("Recusado")]
+        Recusado = 3,
 
     }
     public static class StatusPedidoEnumExtensions
@@ -22,8 +18,8 @@ namespace ContractManagement.Domain.Enums
         {
             return value switch {
                 StatusPedidoEnum.Pendente => "Pendente",
-                StatusPedidoEnum.Aprovado => "Aprovado",
-                StatusPedidoEnum.Rejeitado => "Rejeitado",
+                StatusPedidoEnum.Autorizado => "Autorizado",
+                StatusPedidoEnum.Recusado => "Recusado",
                 _ => "Desconhecido"
             };
         }
