@@ -23,5 +23,10 @@ namespace ContractManagement.Persistence.Repository
             return orders;
         }
 
-   }
+        public async Task<Pedido?> ObterPedidoPorId(Guid Id, CancellationToken cancellationToken = default)
+        {
+            var pedido = await _context.Pedidos.Include(item => item.Items).FirstOrDefaultAsync(i => i.Id == Id, cancellationToken);
+            return pedido;
+        }
+    }
 }

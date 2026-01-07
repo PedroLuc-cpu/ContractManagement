@@ -53,7 +53,7 @@ namespace ContractManagement.Presentation.Controllers
             LimparErrosProcessamento();
             try
             {
-                var pedido = await _pedidoRepository.GetByIdAsync(id);
+                var pedido = await _pedidoRepository.ObterPedidoPorId(id);
                 if (pedido is not null)
                 if (pedido.Id.Equals(id))
                 {

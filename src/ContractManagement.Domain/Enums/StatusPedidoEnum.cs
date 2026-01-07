@@ -4,6 +4,8 @@ namespace ContractManagement.Domain.Enums
 {
     public enum StatusPedidoEnum : byte
     {
+        [Description("Criado")]
+        Criado = 0,
         [Description("Pendente")]
         Pendente = 1,
         [Description("Autorizado")]
@@ -17,6 +19,7 @@ namespace ContractManagement.Domain.Enums
         public static string GetDescription(this Enum value)
         {
             return value switch {
+                StatusPedidoEnum.Criado => "Criado",
                 StatusPedidoEnum.Pendente => "Pendente",
                 StatusPedidoEnum.Autorizado => "Autorizado",
                 StatusPedidoEnum.Recusado => "Recusado",

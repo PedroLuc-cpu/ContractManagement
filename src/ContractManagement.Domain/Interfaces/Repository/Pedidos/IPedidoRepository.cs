@@ -7,5 +7,6 @@ namespace ContractManagement.Domain.Interfaces.Repository.Pedidos
     {
         Task Adicionar(Pedido pedido, CancellationToken cancellationToken = default);
         Task<IEnumerable<Pedido>> ListaPaginada(int pageNumber, int pageSize, CancellationToken cancellationToken = default);
+        Task<Pedido?> ObterPedidoPorId(Guid Id, CancellationToken cancellationToken = default);
     }
 }

@@ -4,6 +4,7 @@ using ContractManagement.Infrastructure.Email;
 using ContractManagement.Infrastructure.Hubs;
 using ContractManagement.Infrastructure.Identity;
 using ContractManagement.Infrastructure.Options;
+using ContractManagement.Infrastructure.Pagamento;
 using ContractManagement.Infrastructure.Persistence;
 using Marten;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -23,6 +24,7 @@ builder.Services.AddOptions<SmtpEmailOptions>()
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
+builder.Services.Configure<StripeOptions>(builder.Configuration.GetSection("Stripe"));
 
 builder.Services.AddDbContext<ContractManagementContext>((serviceProvider, dbContextOptionsBuilder) =>
 {

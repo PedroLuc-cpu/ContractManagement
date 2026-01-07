@@ -20,7 +20,7 @@ namespace ContractManagement.Domain.Entity.Pedidos
         private Pedido(Guid idCliente): base(Guid.NewGuid(), dataCriacao: DateTime.UtcNow) {
             IdCliente = idCliente;
             Numero = NumeroPedido.Create($"PED-{Guid.NewGuid().ToString().Replace("-", "")[..8].ToUpper()}");
-            Status = StatusPedidoEnum.Pendente;
+            Status = StatusPedidoEnum.Criado;
             ValorTotal = Money.Create(0).Value;
         }
 
