@@ -7,10 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Client\Query\**" />
     <Compile Remove="Query\**" />
     <Compile Remove="Validators\**" />
+    <EmbeddedResource Remove="Client\Query\**" />
     <EmbeddedResource Remove="Query\**" />
     <EmbeddedResource Remove="Validators\**" />
+    <None Remove="Client\Query\**" />
     <None Remove="Query\**" />
     <None Remove="Validators\**" />
   </ItemGroup>
@@ -26,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Client\Query\" />
     <Folder Include="Product\Command\Event\" />
   </ItemGroup>
 

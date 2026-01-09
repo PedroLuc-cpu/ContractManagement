@@ -11,6 +11,7 @@ namespace ContractManagement.Presentation.Model
     {
     }
     public sealed record ClienteUpdateRequest(
+        Guid Id,
         string Nome,
         string Sobrenome,
         string Email,

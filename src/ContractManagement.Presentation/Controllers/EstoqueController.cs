@@ -51,12 +51,19 @@ namespace ContractManagement.Presentation.Controllers
         }
 
         [HttpPost("importar-nfe")]
-        [ProducesResponseType(typeof(ImportarNFeCommand), 201)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ImportarNFe(IFormFile xml, CancellationToken cancellationToken)
         {
             LimparErrosProcessamento();
             try
             {
+                if (xml.Length <= 0)
+                {
+                    AdicionarErroProcessamento("O arquivo xml não foi inserido para realizar a importação da nota de entrada.");
+                    return CustomResponse();
+                }
+
                 using var reader = new StreamReader(xml.OpenReadStream());
                 var xmlContent = await reader.ReadToEndAsync(cancellationToken);
 

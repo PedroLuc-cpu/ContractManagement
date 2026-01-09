@@ -4,15 +4,23 @@ using ContractManagement.Domain.Interfaces;
 using ContractManagement.Domain.Interfaces.Repository;
 using ContractManagement.Domain.Interfaces.Repository.Clientes;
 using ContractManagement.Domain.Interfaces.Repository.Pedidos;
+using ContractManagement.Domain.Interfaces.Services;
 using ContractManagement.Domain.Shared;
 
 namespace ContractManagement.Application.Order.Command
 {
-    internal sealed class CreateOrderCommandHandler(IEstoqueRepository estoqueRepository ,IPedidoRepository pedidoRepository, IClienteRepository clienteRepository, IUnitOfWork unitOfWork) : ICommandHandler<CreateOrderCommand>
+    internal sealed class CreateOrderCommandHandler(
+        IEstoqueRepository estoqueRepository,
+        IPedidoRepository pedidoRepository,
+        IClienteRepository clienteRepository,
+        IEmailService emailService,
+        IUnitOfWork unitOfWork
+        ) : ICommandHandler<CreateOrderCommand>
     {
         private readonly IEstoqueRepository _estoqueRepository = estoqueRepository;
         private readonly IPedidoRepository _pedidoRepository = pedidoRepository;
         private readonly IClienteRepository _clienteRepository = clienteRepository;
+        private readonly IEmailService _emailService = emailService;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         public async Task<Result> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
@@ -50,6 +58,7 @@ namespace ContractManagement.Application.Order.Command
             await _pedidoRepository.Adicionar(pedido, cancellationToken);
             await _unitOfWork.Commit(cancellationToken);
 
+            //await _emailService.SendEmailAsync(clienteExists.Email.Value, "Pedido criado com sucesso", "");
 
 
             return Result.Success(pedido.Numero);

@@ -1,4 +1,5 @@
 ﻿using ContractManagement.Application.Abstractions.Messaging;
+using ContractManagement.Domain.Enums;
 using ContractManagement.Domain.Interfaces.Repository.Pedidos;
 using ContractManagement.Domain.Shared;
 
@@ -17,6 +18,7 @@ namespace ContractManagement.Application.Order.Query
             var response = orders.Select(o => new GetOrdersQueryResponse(
                 o.Id,
                 o.IdCliente,
+                StatusPedidoEnumExtensions.GetDescription(o.Status),
                 o.DataCriacao,
                 o.ValorTotal.Value,
                 [.. o.Items.Select(i => new GetOrdersQueryResponseItemOrder(

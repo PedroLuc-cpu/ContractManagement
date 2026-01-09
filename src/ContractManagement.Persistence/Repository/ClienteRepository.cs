@@ -31,20 +31,5 @@ namespace ContractManagement.Persistence.Repository
             var cliente = await _dbSet.Where(c => c.Email.Value == email).FirstOrDefaultAsync(cancellationToken);
             return cliente;            
         }
-
-        public async Task UpdateClientAsync(Cliente cliente, CancellationToken cancellationToken = default)
-        {
-
-            await _dbSet.ExecuteUpdateAsync(set => set
-                .SetProperty(c => c.FirstName.Value, cliente.FirstName.Value)
-                .SetProperty(c => c.LastName.Value, cliente.LastName.Value)
-                .SetProperty(c => c.Email.Value, cliente.Email.Value)
-                .SetProperty(c => c.Endereco.Rua, cliente.Endereco.Numero)
-                .SetProperty(c => c.Endereco.Numero, cliente.Endereco.Rua)
-                .SetProperty(c => c.Endereco.Cidade, cliente.Endereco.Cidade)
-                .SetProperty(c => c.Endereco.Estado, cliente.Endereco.Estado)
-                .SetProperty(c => c.Endereco.Cep, cliente.Endereco.Cep)
-                , cancellationToken);
-        }
     }
 }

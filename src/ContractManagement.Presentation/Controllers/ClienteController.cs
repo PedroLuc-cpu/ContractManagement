@@ -114,6 +114,7 @@ namespace ContractManagement.Presentation.Controllers
             try
             {
                 var commmand = new UpdateClientCommand(
+                    clienteReq.Id,
                     clienteReq.Nome,
                     clienteReq.Sobrenome,
                     clienteReq.Email,

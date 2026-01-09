@@ -1,7 +1,8 @@
 ﻿using ContractManagement.Domain.Common.Exceptions;
 using ContractManagement.Domain.Common.Validations;
 using ContractManagement.Domain.Enums;
-using ContractManagement.Domain.Events;
+using ContractManagement.Domain.Events.Pagamentos;
+using ContractManagement.Domain.Events.Pedidos;
 using ContractManagement.Domain.Primitives;
 using ContractManagement.Domain.ValueObjects;
 

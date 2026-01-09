@@ -2,7 +2,7 @@
 
 namespace ContractManagement.Application.Client.Command
 {
-    public sealed record UpdateClientCommand(string FirstName, string LastName, string Email, string Street, string Number, string City, string State, string ZipCode) : ICommand
+    public sealed record UpdateClientCommand(Guid IdCliente, string Nome, string SobreNome, string Email, string Rua, string Numero, string Cidade, string Estado, string Cep) : ICommand
     {
     }
 }
